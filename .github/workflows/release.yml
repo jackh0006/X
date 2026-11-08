@@ -63,6 +63,7 @@ jobs:
           cd core
           cargo fmt --all -- --check
           cargo test --release
+          cargo build --release
           cd ../app
           flutter pub get
           flutter analyze
