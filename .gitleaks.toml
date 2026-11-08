@@ -1,0 +1,12 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public identifiers deliberately published by this project"
+regexes = [
+  '''CC819EF5E109A1518E840379D8C0CEC84BCCE06B''',
+  '''E8:16:9C:CC:4F:6A:77:B8:6A:44:B8:B6:89:38:F0:DD:7E:79:AA:0F:66:A6:34:3A:2F:3E:5B:88:01:C3:DC:F2''',
+]
+paths = [
+  '''docs/SIGNING_KEY.asc''',
+]
