@@ -58,6 +58,15 @@ jobs:
           keyAlias=$KEY_ALIAS
           storeFile=$RUNNER_TEMP/x-release.jks
           EOF
+      - name: Run release tests
+        run: |
+          cd core
+          cargo fmt --all -- --check
+          cargo test --release
+          cd ../app
+          flutter pub get
+          flutter analyze
+          flutter test
       - name: Build core, DEB, and signed APK
         run: |
           ./scripts/build-linux.sh
