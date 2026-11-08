@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Ubuntu | 24.04.5 LTS, amd64 | PASS | Built, packaged, extracted, launched |
 | Android | arm64-v8a, minSdk 24, targetSdk 36 | Build PASS | Signed APK verified; runtime pending |
-| Android emulator | x86_64, API 35 | NOT TESTED locally | CI workflow ready |
+| Android emulator | x86_64, API 35 | **PASS** | CI run 42512453104, Linux↔Android both directions |
 | Ubuntu 22.04 / 25.04 | amd64 | NOT TESTED | dependency names are compatible; binary built on 24.04 |
 | Physical Android phone | arm64-v8a | NOT TESTED | no device available |
 

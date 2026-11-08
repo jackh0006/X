@@ -147,6 +147,7 @@ Summary as of v1.0.0 (full evidence in
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |
 | APK build, signature, arm64 core | **PASS** |
 | DEB build, metadata, extraction, launch | **PASS** |
+| Android emulator + cross-platform | **PASS** (CI) |
 | Physical Android device runtime | **NOT TESTED** |
 | System-wide `dpkg -i` | **NOT TESTED** (needs sudo) |
 

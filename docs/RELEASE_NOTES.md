@@ -39,6 +39,7 @@ APK certificate SHA-256:
 - Wrong passphrase and tampered ciphertext both fail authentication.
 - No forward secrecy, sender authentication, replay protection or metadata
   protection. No independent audit has been performed.
+- Linux↔Android interoperability passed in CI on an x86_64 API 35 emulator.
 - This release has not been tested on a physical Android device in the build
   environment; see `docs/COMPATIBILITY.md`.
 

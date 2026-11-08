@@ -46,7 +46,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Mobile layout / large text scaling | PASS | widget test, 1.8× scale |
 | Native FFI round-trip, wrong pass, inspect | PASS | 3 native tests on host |
 | Flutter static analysis | PASS | `flutter analyze`: no issues |
-| Android emulator runtime + Linux↔Android interoperability | NOT TESTED | workflow defined; result to be recorded after CI |
+| Android emulator runtime + Linux↔Android interoperability | **PASS** | GitHub Actions run [42512453104](https://github.com/jackh0006/X/actions/runs/42512453104): Linux fixture decrypted on x86_64 API 35 emulator; Android payload decrypted by Linux core |
 
 ## Security and supply chain
 
@@ -70,6 +70,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Linux launch from built bundle | PASS | real app + screenshots |
 | DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` |
 | DEB extraction + executable launch | PASS | extracted `/opt/x/x` ran |
+| DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
 | Android arm64 cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
 | Android release APK build | PASS | 19,887,708 bytes |
