@@ -46,6 +46,8 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Mobile layout / large text scaling | PASS | widget test, 1.8× scale |
 | Native FFI round-trip, wrong pass, inspect | PASS | 3 native tests on host |
 | Flutter static analysis | PASS | `flutter analyze`: no issues |
+| Flutter line coverage | **90.3%** (858/950) | `flutter test --coverage` |
+| Rust line coverage | NOT INSTRUMENTED | all core modules covered by targeted tests; no llvm-cov run |
 | Full CI gate | **PASS** | GitHub Actions run 42522448260 (all five jobs) |
 | Android emulator runtime + Linux↔Android interoperability | **PASS** | GitHub Actions run [42522487923](https://github.com/jackh0006/X/actions/runs/42522487923): Linux fixture decrypted on x86_64 API 35 emulator; Android payload decrypted by Linux core |
 

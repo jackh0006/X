@@ -141,7 +141,7 @@ Summary as of v1.0.1 (full evidence in
 | Area | Result |
 |---|---|
 | Rust core tests (crypto, parser, limits, FFI) | **25 / 25 PASS** |
-| Flutter widget + native FFI tests | **14 / 14 PASS** |
+| Flutter widget + native FFI tests | **14 / 14 PASS**, 90.3% line coverage |
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |
