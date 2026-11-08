@@ -25,13 +25,10 @@ ARM64.
 | `TEST_RESULTS.md` | Test report | — |
 | `SECURITY_ASSESSMENT.md` | Self-assessment | — |
 
-Local verification build checksums (the CI release job publishes the
-authoritative checksums for its own build):
+The authoritative checksums for the published artifacts are in
+`SHA256SUMS` in this release. The sizes above describe the local verification
+build; the CI-built release may differ slightly.
 
-```
-124c1850016e1e69df595f02d7a2d40c6ceaf18a17183bc079463e9dcfbb2a18  app-release.apk
-6a8c9ac1359df9be58e813dd1f02a01cf18de40e8e65fe46abf196cfdaca098a  x_amd64.deb
-```
 
 APK certificate SHA-256:
 `E8:16:9C:CC:4F:6A:77:B8:6A:44:B8:B6:89:38:F0:DD:7E:79:AA:0F:66:A6:34:3A:2F:3E:5B:88:01:C3:DC:F2`
