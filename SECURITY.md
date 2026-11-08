@@ -50,4 +50,8 @@ tests is evidence of tested behavior, not a guarantee.
   published in `INSTALLATION.md`); the keystore is never committed.
 - Releases include SHA-256 checksums, a CycloneDX SBOM and GitHub build
   provenance attestations.
-- Verify artifacts before installing them. See [`INSTALLATION.md`](INSTALLATION.md).
+- Release tags and subsequent commits are GPG-signed with key
+  `CC819EF5E109A1518E840379D8C0CEC84BCCE06B`; the public key is
+  [`docs/SIGNING_KEY.asc`](docs/SIGNING_KEY.asc).
+- Verify artifacts before installing them. See [`INSTALLATION.md`](INSTALLATION.md)
+  and [`docs/VERIFYING.md`](docs/VERIFYING.md).
