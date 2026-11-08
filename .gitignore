@@ -1,0 +1,55 @@
+# Rust
+/core/target/
+/core/fuzz/target/
+/core/fuzz/artifacts/
+/core/fuzz/corpus/
+/core/fuzz/Cargo.lock
+**/*.rs.bk
+
+# Flutter / Dart
+/app/.dart_tool/
+/app/.flutter-plugins
+/app/.flutter-plugins-dependencies
+/app/.packages
+/app/build/
+/app/.pub-cache/
+/app/linux/flutter/ephemeral/
+/app/android/.gradle/
+/app/android/local.properties
+/app/android/app/src/main/jniLibs/
+/app/ios/Flutter/ephemeral/
+/app/macos/Flutter/ephemeral/
+/app/windows/flutter/ephemeral/
+
+# Signing material — never commit
+*.jks
+*.keystore
+*.p12
+app/android/key.properties
+key.properties
+**/key.properties
+
+# Build/release output
+/build/
+/dist/
+*.apk
+*.aab
+*.deb
+*.dmg
+*.msix
+
+# Environments and logs
+.env
+.env.*
+*.log
+core/fuzz/*.log
+
+# Editors / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local tooling
+/.opencode/

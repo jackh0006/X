@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=X
+GenericName=Encrypted Text
+Comment=Encrypt and decrypt text offline with a passphrase
+Exec=/opt/x/x
+Icon=x
+Terminal=false
+Categories=Utility;Security;TextTools;
+Keywords=encryption;privacy;offline;passphrase;
+StartupNotify=true
+StartupWMClass=com.jackh0006.x

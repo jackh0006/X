@@ -1,0 +1,4 @@
+# GitHub's funding picker accepts URLs, not raw cryptocurrency addresses.
+# The verified public addresses live in the repository's Donate section.
+custom:
+  - "https://github.com/jackh0006/X#donate"

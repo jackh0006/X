@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest a change that keeps X small, offline and secure
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      options:
+        - label: This does not require an account, server, telemetry or network access.
+        - label: This does not weaken the cryptography or the payload format without a versioned migration.
+        - label: This keeps the four-section interface unless there is a strong reason.

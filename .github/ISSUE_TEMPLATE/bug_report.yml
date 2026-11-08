@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible defect in X
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real passphrases, private messages, or wallet secrets.
+        Security vulnerabilities must be emailed privately (see SECURITY.md).
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Ubuntu (amd64)
+        - Android (arm64)
+        - Build from source
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open SEND
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error text / logs
+      description: Remove all sensitive data first.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed passphrases and plaintext from this report.
+          required: true
+        - label: This is not a security vulnerability (those go to email).
+          required: true
