@@ -37,12 +37,21 @@ Key fingerprint: `CC819EF5E109A1518E840379D8C0CEC84BCCE06B`.
 
 ## Build provenance
 
-For a release with GitHub attestations:
+For a release with GitHub attestations (requires a recent `gh`):
 
 ```bash
 gh attestation verify app-release.apk --repo jackh0006/X
 gh attestation verify x_amd64.deb --repo jackh0006/X
 ```
+
+Older `gh` versions can query the attestation API directly:
+
+```bash
+sha256sum app-release.apk
+gh api "repos/jackh0006/X/attestations/sha256:<digest>" --jq '.attestations | length'
+```
+
+A result of `1` means a build-provenance attestation exists for that digest.
 
 ## DEB
 
