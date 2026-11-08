@@ -53,13 +53,4 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: |
-            cd app
-            flutter test integration_test/interop_test.dart -d emulator-5554 | tee /tmp/interop.log
-            PAYLOAD="$(grep -o 'X_INTEROP_CIPHERTEXT=.*' /tmp/interop.log | head -1 | cut -d= -f2-)"
-            test -n "$PAYLOAD"
-            cd ../core
-            printf '%s' "$PAYLOAD" | cargo run --release --features fixtures \
-              --bin x-fixture -- open --pass 'correct horse battery staple' \
-              | grep -q 'Android to Linux interoperability check'
-            echo "Android-generated payload decrypted by the Linux core."
+          script: bash scripts/ci-interop.sh
