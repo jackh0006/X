@@ -35,7 +35,7 @@ Version 1.0.0, 2026-11-08.
 | X-07 | Low (evidence) | Fuzzing could not run with AddressSanitizer because the vendored libsodium C build fails ASAN link; it ran without ASAN. | Documented |
 | X-08 | Low (build) | `dpkg -i` could not be tested without sudo; extraction and execution passed. | Documented |
 | X-09 | Low (supply chain) | Vendored libsodium and crates add supply-chain surface; locks, audits, SBOM and provenance reduce but do not eliminate it. | Mitigated/documented |
-| X-10 | Low | CodeQL currently analyzes GitHub Actions; Rust is covered by clippy/audit/fuzz, Kotlin by compilation. | Documented |
+| X-10 | Low | CodeQL currently analyzes GitHub Actions; Rust is covered by clippy/audit/fuzz, Kotlin by compilation. | Documented; CodeQL Actions PASS |
 
 No critical or high-severity implementation vulnerability was found in the
 reviewed code. This statement is limited by the absence of an independent audit.

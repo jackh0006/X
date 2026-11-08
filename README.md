@@ -145,6 +145,7 @@ Summary as of v1.0.0 (full evidence in
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |
+| CI incl. gitleaks, CodeQL, dependency review | **PASS** |
 | APK build, signature, arm64 core | **PASS** |
 | DEB build, metadata, extraction, launch | **PASS** |
 | Android emulator + cross-platform | **PASS** (CI) |
