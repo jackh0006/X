@@ -4,11 +4,11 @@
 
 Requirements: Android 7.0 (API 24) or newer, **arm64-v8a** device.
 
-1. Download `app-release.apk` from
+1. Download `X-android-arm64.apk` from
    [Releases](https://github.com/jackh0006/X/releases/latest).
 2. Verify the SHA-256 checksum from the same release:
    ```bash
-   sha256sum app-release.apk
+   sha256sum X-android-arm64.apk
    ```
    Compare with `SHA256SUMS`.
 3. Allow your browser/file manager to install unknown apps, then open the APK.
@@ -29,14 +29,14 @@ X requests no Internet permission and disables Android backup.
 Tested on **Ubuntu 24.04.5 LTS**. Other releases are not claimed as tested.
 
 ```bash
-sudo apt install ./x_amd64.deb
+sudo apt install ./X-linux-amd64.deb
 x
 ```
 
 Or:
 
 ```bash
-sudo dpkg -i x_amd64.deb
+sudo dpkg -i X-linux-amd64.deb
 sudo apt-get install -f   # only if dependencies are missing
 ```
 
@@ -60,8 +60,8 @@ service, no root daemon, and no background process.
 Verify the DEB before installing:
 
 ```bash
-sha256sum x_amd64.deb
-dpkg-deb -I x_amd64.deb
+sha256sum X-linux-amd64.deb
+dpkg-deb -I X-linux-amd64.deb
 ```
 
 ## Build from source

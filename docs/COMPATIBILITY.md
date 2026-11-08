@@ -28,7 +28,7 @@ are packaged. The supported and tested target is **arm64-v8a**.
 
 ## Ubuntu
 
-- Package: `x_amd64.deb`, architecture amd64
+- Package: `X-linux-amd64.deb`, architecture amd64
 - Install root: `/opt/x`, launcher `/usr/bin/x`
 - Desktop entry: `/usr/share/applications/x.desktop`
 - Icons: hicolor 128/256/512

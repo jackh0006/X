@@ -18,8 +18,8 @@ arm64-v8a.
 
 | File | Platform | Size |
 |---|---|---:|
-| `app-release.apk` | Android arm64-v8a, minSdk 24 | 19,887,708 bytes |
-| `x_amd64.deb` | Ubuntu amd64 | 8,967,850 bytes |
+| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24 | 19,887,708 bytes |
+| `X-linux-amd64.deb` | Ubuntu amd64 | 8,967,850 bytes |
 | `SHA256SUMS` | Both | — |
 | `x-1.0.0.cdx.json` | CycloneDX SBOM | — |
 | `TEST_RESULTS.md` | Test report | — |
@@ -45,12 +45,12 @@ APK certificate SHA-256:
 
 ## Install
 
-Android: install `app-release.apk` (arm64-v8a). Verify the checksum first.
+Android: install `X-android-arm64.apk` (arm64-v8a). Verify the checksum first.
 
 Ubuntu:
 
 ```bash
-sudo apt install ./x_amd64.deb
+sudo apt install ./X-linux-amd64.deb
 x
 ```
 

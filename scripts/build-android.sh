@@ -13,5 +13,5 @@ fi
 cd "$ROOT/app"
 flutter build apk --release --target-platform android-arm64
 mkdir -p "$ROOT/dist"
-cp build/app/outputs/flutter-apk/app-release.apk "$ROOT/dist/app-release.apk"
-printf 'apk: %s\n' "$ROOT/dist/app-release.apk"
+cp build/app/outputs/flutter-apk/app-release.apk "$ROOT/dist/X-android-arm64.apk"
+printf 'apk: %s\n' "$ROOT/dist/X-android-arm64.apk"

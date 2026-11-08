@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build x_amd64.deb from an already-built Flutter Linux bundle.
+# Build X-linux-amd64.deb from an already-built Flutter Linux bundle.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VERSION="$(grep -m1 '^version:' "$ROOT/app/pubspec.yaml" | sed 's/version: //; s/+.*//')"
@@ -102,6 +102,5 @@ rm -rf "$STAGE/debian"
 mkdir -p "$ROOT/dist"
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1791504000}"
 dpkg-deb --build --root-owner-group --uniform-compression \
-  "$STAGE" "$ROOT/dist/x_${VERSION}_amd64.deb" >/dev/null
-cp "$ROOT/dist/x_${VERSION}_amd64.deb" "$ROOT/dist/x_amd64.deb"
-echo "deb: $ROOT/dist/x_amd64.deb"
+  "$STAGE" "$ROOT/dist/X-linux-amd64.deb" >/dev/null
+echo "deb: $ROOT/dist/X-linux-amd64.deb"

@@ -46,7 +46,7 @@ Run:
 ./scripts/build-deb.sh
 ```
 
-Output: `dist/x_1.0.1_amd64.deb` and `dist/x_amd64.deb`. The script:
+Output: `dist/X-linux-amd64.deb`. The script:
 
 - stages `/opt/x`, `/usr/bin/x`, desktop entry and icons;
 - computes runtime dependencies with `dpkg-shlibdeps`;
@@ -61,7 +61,7 @@ cargo install cargo-ndk --locked
 ./scripts/build-android.sh
 ```
 
-Output: `dist/app-release.apk`, arm64-v8a, signed if
+Output: `dist/X-android-arm64.apk`, arm64-v8a, signed if
 `app/android/key.properties` exists.
 
 ### Creating your own release key

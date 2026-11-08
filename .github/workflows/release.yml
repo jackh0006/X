@@ -79,30 +79,30 @@ jobs:
           SBOM="$(python3 scripts/generate_sbom.py | tail -1)"
           echo "SBOM=$SBOM" >> "$GITHUB_ENV"
           cd dist
-          sha256sum app-release.apk x_amd64.deb > SHA256SUMS
+          sha256sum X-android-arm64.apk X-linux-amd64.deb > SHA256SUMS
           cat SHA256SUMS
       - name: Verify signed APK
         run: |
           BT="$ANDROID_HOME/build-tools/36.0.0"
-          "$BT/apksigner" verify --verbose dist/app-release.apk
-          "$BT/aapt" dump badging dist/app-release.apk | grep "package: name='com.jackh0006.x'"
-          unzip -l dist/app-release.apk | grep 'lib/arm64-v8a/libx_core.so'
-          dpkg-deb -I dist/x_amd64.deb
+          "$BT/apksigner" verify --verbose dist/X-android-arm64.apk
+          "$BT/aapt" dump badging dist/X-android-arm64.apk | grep "package: name='com.jackh0006.x'"
+          unzip -l dist/X-android-arm64.apk | grep 'lib/arm64-v8a/libx_core.so'
+          dpkg-deb -I dist/X-linux-amd64.deb
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: |
-            dist/app-release.apk
-            dist/x_amd64.deb
+            dist/X-android-arm64.apk
+            dist/X-linux-amd64.deb
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            --title "X ${GITHUB_REF_NAME#v}" \
+            --title "X v${GITHUB_REF_NAME#v}" \
             --notes-file docs/RELEASE_NOTES.md \
-            dist/app-release.apk \
-            dist/x_amd64.deb \
+            dist/X-android-arm64.apk \
+            dist/X-linux-amd64.deb \
             dist/SHA256SUMS \
             "$SBOM" \
             docs/TEST_RESULTS.md \
@@ -111,7 +111,7 @@ jobs:
         with:
           name: x-release-artifacts
           path: |
-            dist/app-release.apk
-            dist/x_amd64.deb
+            dist/X-android-arm64.apk
+            dist/X-linux-amd64.deb
             dist/SHA256SUMS
             dist/x-*.cdx.json

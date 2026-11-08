@@ -27,8 +27,8 @@ unnecessary preferences plugin.
 
 | File | Platform |
 |---|---|
-| `app-release.apk` | Android arm64-v8a, minSdk 24, versionCode 2 |
-| `x_amd64.deb` | Ubuntu amd64, version 1.0.1 |
+| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 2 |
+| `X-linux-amd64.deb` | Ubuntu amd64, version 1.0.1 |
 | `SHA256SUMS` | Both artifacts |
 | `x-1.0.1.cdx.json` | CycloneDX SBOM |
 | `TEST_RESULTS.md` | Test report |
@@ -51,12 +51,12 @@ APK certificate SHA-256:
 
 ## Install
 
-Android: install `app-release.apk` (arm64-v8a). Verify the checksum first.
+Android: install `X-android-arm64.apk` (arm64-v8a). Verify the checksum first.
 
 Ubuntu:
 
 ```bash
-sudo apt install ./x_amd64.deb
+sudo apt install ./X-linux-amd64.deb
 x
 ```
 

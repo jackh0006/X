@@ -60,8 +60,8 @@ encryption and a real decryption.
 
 | Platform | Artifact | Requirements |
 |---|---|---|
-| Android | [`app-release.apk`](https://github.com/jackh0006/X/releases/latest/download/app-release.apk) | arm64-v8a, Android 7.0+ |
-| Ubuntu | [`x_amd64.deb`](https://github.com/jackh0006/X/releases/latest/download/x_amd64.deb) | Ubuntu 24.04 amd64 (tested) |
+| Android | [`X-android-arm64.apk`](https://github.com/jackh0006/X/releases/latest/download/X-android-arm64.apk) | arm64-v8a, Android 7.0+ |
+| Ubuntu | [`X-linux-amd64.deb`](https://github.com/jackh0006/X/releases/latest/download/X-linux-amd64.deb) | Ubuntu 24.04 amd64 (tested) |
 
 Each release also includes `SHA256SUMS`, a CycloneDX SBOM, test results and a
 self-assessment. Verify the checksum and the APK signing certificate before
@@ -70,7 +70,7 @@ installing. See [`INSTALLATION.md`](INSTALLATION.md).
 ### Android
 
 ```text
-1. Download app-release.apk
+1. Download X-android-arm64.apk
 2. Verify its SHA-256 against SHA256SUMS
 3. Allow installation from your file manager for this one APK
 4. Open X
@@ -79,8 +79,8 @@ installing. See [`INSTALLATION.md`](INSTALLATION.md).
 ### Ubuntu
 
 ```bash
-sha256sum x_amd64.deb
-sudo apt install ./x_amd64.deb
+sha256sum X-linux-amd64.deb
+sudo apt install ./X-linux-amd64.deb
 x
 ```
 
@@ -212,7 +212,7 @@ Validation evidence: [`docs/DONATIONS.md`](docs/DONATIONS.md).
 ./scripts/build-linux.sh
 ./scripts/build-deb.sh
 
-# Android (arm64)
+# Android (arm64-v8a)
 export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk/28.2.13676358"
 ./scripts/build-android.sh
 ```
