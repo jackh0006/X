@@ -135,7 +135,7 @@ See [`PRIVACY.md`](PRIVACY.md).
 
 ## Test results
 
-Summary as of v1.0.0 (full evidence in
+Summary as of v1.0.1 (full evidence in
 [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)):
 
 | Area | Result |
@@ -166,7 +166,7 @@ On an Intel Pentium G2030 (2 cores, 3.8 GiB RAM, Ubuntu 24.04):
 | Linux startup to window | 1.36 s | — |
 | Linux max RSS | ~180 MiB | — |
 
-Artifacts: **19.0 MiB APK**, **8.6 MiB DEB**, **26 MiB installed Linux bundle**.
+Artifacts: **18.0 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
 See [`docs/PERFORMANCE_BENCHMARKS.md`](docs/PERFORMANCE_BENCHMARKS.md).
 
 ## Compatibility

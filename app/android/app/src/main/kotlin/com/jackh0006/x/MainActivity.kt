@@ -1,6 +1,7 @@
 package com.jackh0006.x
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -42,6 +43,22 @@ class MainActivity : FlutterActivity() {
             "com.jackh0006.x/native",
         ).setMethodCallHandler { call, result ->
             when (call.method) {
+                "getTheme" -> {
+                    val prefs = getSharedPreferences("x", Context.MODE_PRIVATE)
+                    result.success(prefs.getString("theme_mode", "system"))
+                }
+
+                "setTheme" -> {
+                    val value = call.argument<String>("theme_mode")
+                    if (value == null) {
+                        result.error("INVALID_ARGUMENT", "Missing theme", null)
+                        return@setMethodCallHandler
+                    }
+                    getSharedPreferences("x", Context.MODE_PRIVATE).edit()
+                        .putString("theme_mode", value).apply()
+                    result.success(true)
+                }
+
                 "shareText" -> {
                     val text = call.argument<String>("text")
                     if (text == null) {

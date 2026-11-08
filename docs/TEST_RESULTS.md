@@ -60,7 +60,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Secret scan | **PASS** | gitleaks in CI; allowlist only for published key/cert fingerprints |
 | CodeQL | **PASS** (Actions) | CodeQL workflow analyzes GitHub Actions; Rust covered by clippy/audit/fuzz |
 | Dependency review | **PASS** (PR) | GitHub dependency-review workflow |
-| SBOM generation | PASS | `dist/x-1.0.0.cdx.json` generated from lockfiles |
+| SBOM generation | PASS | `dist/x-1.0.1.cdx.json` generated from lockfiles |
 
 ## Builds and packages
 
@@ -74,9 +74,9 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
 | Android arm64 cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
-| Android release APK build | PASS | 19,887,708 bytes |
+| Android release APK build | PASS | 18,892,276 bytes, versionCode 2 |
 | APK signature | PASS | `apksigner verify`; RSA-4096, SHA-256 cert `e8169ccc…dcf2` |
-| APK package/arch | PASS | `com.jackh0006.x`, arm64-v8a core present |
+| APK package/arch | PASS | `com.jackh0006.x`; `native-code` is exactly `arm64-v8a` |
 | APK install on physical Android device | NOT TESTED | no device available |
 | APK install on emulator | NOT TESTED | local host has no `/dev/kvm`; CI workflow defined |
 

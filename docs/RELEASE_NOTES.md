@@ -1,7 +1,8 @@
-# X 1.0.0
+# X 1.0.1
 
 A lightweight, offline-first encrypted text utility for Ubuntu AMD64 and Android
-ARM64.
+ARM64. This patch makes the Android release strictly arm64-v8a and removes an
+unnecessary preferences plugin.
 
 ## Highlights
 
@@ -12,23 +13,28 @@ ARM64.
 - Fresh 16-byte salt and 24-byte nonce for every encryption.
 - Standard (128 MiB / 3) and High (256 MiB / 4) KDF profiles.
 - Seven-word EFF passphrase generator.
-- Beautiful light/dark interface; Android share and SAF save; Linux DEB.
+- Light/dark interface; Android share and SAF save; Linux DEB.
+
+## Fixed in 1.0.1
+
+- The APK now advertises and contains only `arm64-v8a`. The previous
+  `shared_preferences` dependency added x86/x86_64 JNI stubs, which could make
+  Android offer the app to unsupported devices.
+- Theme persistence uses a small Android native preference or a Linux XDG file,
+  removing several transitive packages and reducing APK size.
 
 ## Artifacts
 
-| File | Platform | Size |
-|---|---|---:|
-| `app-release.apk` | Android arm64-v8a, minSdk 24 | 19,887,708 bytes |
-| `x_amd64.deb` | Ubuntu amd64 | 8,967,850 bytes |
-| `SHA256SUMS` | Both | — |
-| `x-1.0.0.cdx.json` | CycloneDX SBOM | — |
-| `TEST_RESULTS.md` | Test report | — |
-| `SECURITY_ASSESSMENT.md` | Self-assessment | — |
+| File | Platform |
+|---|---|
+| `app-release.apk` | Android arm64-v8a, minSdk 24, versionCode 2 |
+| `x_amd64.deb` | Ubuntu amd64, version 1.0.1 |
+| `SHA256SUMS` | Both artifacts |
+| `x-1.0.1.cdx.json` | CycloneDX SBOM |
+| `TEST_RESULTS.md` | Test report |
+| `SECURITY_ASSESSMENT.md` | Self-assessment |
 
-The authoritative checksums for the published artifacts are in
-`SHA256SUMS` in this release. The sizes above describe the local verification
-build; the CI-built release may differ slightly.
-
+The authoritative checksums are in `SHA256SUMS` in this release.
 
 APK certificate SHA-256:
 `E8:16:9C:CC:4F:6A:77:B8:6A:44:B8:B6:89:38:F0:DD:7E:79:AA:0F:66:A6:34:3A:2F:3E:5B:88:01:C3:DC:F2`
@@ -40,8 +46,8 @@ APK certificate SHA-256:
 - No forward secrecy, sender authentication, replay protection or metadata
   protection. No independent audit has been performed.
 - Linux↔Android interoperability passed in CI on an x86_64 API 35 emulator.
-- This release has not been tested on a physical Android device in the build
-  environment; see `docs/COMPATIBILITY.md`.
+- A physical arm64 Android device was not available in the build environment;
+  see `docs/COMPATIBILITY.md`.
 
 ## Install
 

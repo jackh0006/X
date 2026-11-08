@@ -13,7 +13,7 @@
 ## Android
 
 - Application ID: `com.jackh0006.x`
-- Version: 1.0.0 (versionCode 1)
+- Version: 1.0.1 (versionCode 2)
 - minSdk 24, targetSdk 36, compileSdk 36
 - Native core: `lib/arm64-v8a/libx_core.so`
 - Signing: RSA-4096, APK Signature Scheme v2, certificate SHA-256
@@ -23,9 +23,8 @@
 - Backup disabled (`allowBackup=false`)
 - Share and save use Android system intents (no storage permission)
 
-The APK also contains tiny `libdartjni.so`/datastore stubs for other ABIs added
-by an AndroidX dependency, but the Flutter engine and X core are absent for
-those ABIs; the supported and tested target is **arm64-v8a**.
+The APK's `native-code` list is exactly `arm64-v8a`; no 32-bit or x86 stubs
+are packaged. The supported and tested target is **arm64-v8a**.
 
 ## Ubuntu
 

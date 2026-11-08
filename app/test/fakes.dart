@@ -54,5 +54,5 @@ class FakeXService implements XService {
       );
 
   @override
-  String get coreVersion => '1.0.0-test';
+  String get coreVersion => '1.0.1-test';
 }

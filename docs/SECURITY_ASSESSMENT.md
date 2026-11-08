@@ -7,7 +7,7 @@ security audit, penetration test, or formal verification.**
 
 Reviewed: Rust core (`core/src`), FFI boundary, Flutter UI and Android/Linux
 platform glue, build scripts, dependency locks, and release configuration.
-Version 1.0.0, 2026-11-08.
+Version 1.0.1, 2026-11-08.
 
 ## Method
 

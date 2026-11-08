@@ -29,8 +29,8 @@ The release tag is GPG-signed. The public key is in
 ```bash
 gpg --import SIGNING_KEY.asc
 git fetch --tags
-git verify-tag v1.0.0
-git log --show-signature -1 v1.0.0
+git verify-tag v1.0.1
+git log --show-signature -1 v1.0.1
 ```
 
 Key fingerprint: `CC819EF5E109A1518E840379D8C0CEC84BCCE06B`.

@@ -2,6 +2,16 @@
 
 All notable changes are recorded here. The project follows semantic versioning.
 
+## [1.0.1] - 2026-11-08
+
+### Fixed
+
+- Release APK now advertises and contains only the arm64-v8a ABI. Removing the
+  `shared_preferences` plugin eliminated x86/x86_64 `libdartjni` stubs that
+  could make Android offer the app to unsupported devices.
+- Theme persistence now uses a small native Android preference or a Linux XDG
+  file, reducing dependencies and APK size.
+
 ## [1.0.0] - 2026-11-08
 
 Initial public release.

@@ -46,7 +46,7 @@ Run:
 ./scripts/build-deb.sh
 ```
 
-Output: `dist/x_1.0.0_amd64.deb` and `dist/x_amd64.deb`. The script:
+Output: `dist/x_1.0.1_amd64.deb` and `dist/x_amd64.deb`. The script:
 
 - stages `/opt/x`, `/usr/bin/x`, desktop entry and icons;
 - computes runtime dependencies with `dpkg-shlibdeps`;

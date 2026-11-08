@@ -44,10 +44,10 @@ performance reasons.
 |---|---|---|
 | Linux startup to window | **1.36 s** | launch → first X window, 50 ms polling |
 | Linux max RSS | **~180 MiB** | `/usr/bin/time -v`, 8 s run |
-| APK size | 19,887,708 bytes (19.0 MiB) | `stat` |
-| DEB size | 8,967,850 bytes (8.6 MiB) | `stat` |
+| APK size | 18,892,276 bytes (18.0 MiB) | `stat` |
+| DEB size | 8,928,452 bytes (8.5 MiB) | `stat` |
 | Installed Linux bundle | 26 MiB | `du -sh` |
-| DEB installed size (control) | 26,364 KiB | `dpkg-deb -I` |
+| DEB installed size (control) | 26,156 KiB | `dpkg-deb -I` |
 
 Android startup/RAM and KDF timing on ARM64 hardware are **NOT TESTED** locally;
 the cross-platform workflow records emulator results when run. Emulator numbers
