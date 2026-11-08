@@ -3,7 +3,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:x/core/api.dart';
 import 'package:x/core/native_x_service.dart';
 
-/// Fixed fixture generated on Ubuntu AMD64 with the checked-in Rust core.
+/// Fixed fixture generated on Ubuntu amd64 with the checked-in Rust core.
 /// If this decrypts on Android, both platforms implement the same format.
 const linuxFixture =
     'X1.WE1TRwEBAQAAAAMIAAAAAAECAwQFBgcICQoLDA0ODwABAgMEBQYHCAkKCwwNDg8QERITFBUWF_P7_ipwOXsGJqwFsblM9AasJnlcDGz9etRJ8g5mGduKzQAYbYoF6i3B9BqsnwBBW382bn3HHjXiLQDvzWIkR5UoTYk95CJutbzL4oF9nTxksg';

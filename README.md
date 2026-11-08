@@ -14,7 +14,7 @@
   <a href="https://github.com/jackh0006/X/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/jackh0006/X?label=release"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-F97316"></a>
   <img alt="Ubuntu 24.04" src="https://img.shields.io/badge/Ubuntu-24.04%20amd64-F97316">
-  <img alt="Android arm64" src="https://img.shields.io/badge/Android-arm64--v8a-F97316">
+  <img alt="Android arm64-v8a" src="https://img.shields.io/badge/Android-arm64--v8a-F97316">
 </p>
 
 ---

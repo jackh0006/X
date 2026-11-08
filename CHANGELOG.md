@@ -30,14 +30,14 @@ Initial public release.
 - Light, dark and system themes with a theme-aware Linux title bar.
 - Android SAF save and native share; Linux file save; clipboard copy.
 - Android arm64-v8a release APK and Ubuntu amd64 DEB.
-- Rust, Flutter, native FFI, parser-fuzz and cross-platform test suites.
+- Rust, Flutter, native FFI, parser-fuzz, and cross-platform test suites.
 - CI, CodeQL for workflows, dependency review, Scorecard, gitleaks, SBOM,
-  release provenance and pinned GitHub Actions.
+  release provenance, and pinned GitHub Actions.
 - Complete security, privacy, threat-model, format, build and support docs.
 
 ### Known limitations
 
-- No forward secrecy, sender identity, replay protection or metadata privacy.
+- No forward secrecy, sender identity, replay protection, or metadata privacy.
 - No independent security audit.
 - Android runtime interoperability is exercised by CI, not a physical device in
   the build environment.

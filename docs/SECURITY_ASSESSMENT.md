@@ -65,7 +65,7 @@ claim.
 | Cryptographic implementation | 8.5/10 | libsodium 1.0.22, XChaCha20-Poly1305, Argon2id, independent cross-checks; no audit |
 | Key management | 6.0/10 | Simple passphrase model; no forward secrecy, sender identity or key rotation |
 | Authentication & integrity | 9.0/10 | AEAD over ciphertext and full header; strict parser and tamper tests |
-| Privacy | 9.5/10 | No account, network, telemetry or ads; Android backup disabled |
+| Privacy | 9.5/10 | No account, network, telemetry, or ads; Android backup disabled |
 | Reliability | 8.0/10 | Deterministic error handling, limits, tests; Android runtime pending |
 | Performance | 7.5/10 | ~0.47 s Standard / ~1.24 s High on old dual-core; 180 MiB RSS |
 | Portability | 8.0/10 | Shared payload and core; Ubuntu and arm64 Android built; runtime evidence pending |

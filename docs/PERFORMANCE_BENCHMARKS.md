@@ -49,7 +49,7 @@ performance reasons.
 | Installed Linux bundle | 26 MiB | `du -sh` |
 | DEB installed size (control) | 26,156 KiB | `dpkg-deb -I` |
 
-Android startup/RAM and KDF timing on ARM64 hardware are **NOT TESTED** locally;
+Android startup/RAM and KDF timing on arm64-v8a hardware are **NOT TESTED** locally;
 the cross-platform workflow records emulator results when run. Emulator numbers
 are not a substitute for a physical phone.
 

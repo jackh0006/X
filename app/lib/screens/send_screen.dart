@@ -144,7 +144,7 @@ class _SendScreenState extends State<SendScreen> {
     if (Platform.isAndroid) {
       try {
         final saved = await NativeBridge.saveText(value);
-        _snack(saved ? 'Encrypted text saved.' : 'Save cancelled.');
+        _snack(saved ? 'Encrypted text saved.' : 'Save canceled.');
       } catch (_) {
         _snack('Could not save the file.');
       }

@@ -38,7 +38,7 @@ $ANDROID_HOME/build-tools/36.0.0/apksigner verify --print-certs dist/app-release
 | `core/src/ffi.rs` | FFI round-trip, error shape, UTF-8 |
 | `app/lib/screens/*` | widget tests: navigation, send, receive, donate, about |
 | `app/lib/theme/*` | light/dark switching, screenshots |
-| `app/integration_test/*` | Linux↔Android fixture interoperability |
+| `app/integration_test/*` | Linux and Android fixture interoperability |
 | `packaging/linux/*` | DEB inspection, extraction, launch |
 
 ## Test impact strategy

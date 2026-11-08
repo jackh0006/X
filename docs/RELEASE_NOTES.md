@@ -1,14 +1,14 @@
-# X 1.0.1
+# X v1.0.1
 
-A lightweight, offline-first encrypted text utility for Ubuntu AMD64 and Android
-ARM64. This patch makes the Android release strictly arm64-v8a and removes an
+A lightweight, offline-first encrypted text utility for Ubuntu amd64 and Android
+arm64-v8a. This patch makes the Android release strictly arm64-v8a and removes an
 unnecessary preferences plugin.
 
 ## Highlights
 
 - **SEND** encrypts text locally into portable `X1.…` ciphertext.
 - **RECEIVE** authenticates and decrypts it locally.
-- **No account, server, registration, telemetry or Internet permission.**
+- **No account, server, registration, telemetry, or Internet permission.**
 - XChaCha20-Poly1305-IETF + Argon2id via libsodium 1.0.22.
 - Fresh 16-byte salt and 24-byte nonce for every encryption.
 - Standard (128 MiB / 3) and High (256 MiB / 4) KDF profiles.
@@ -43,9 +43,9 @@ APK certificate SHA-256:
 
 - The passphrase is **not** embedded. Share it separately.
 - Wrong passphrase and tampered ciphertext both fail authentication.
-- No forward secrecy, sender authentication, replay protection or metadata
+- No forward secrecy, sender authentication, replay protection, or metadata
   protection. No independent audit has been performed.
-- Linux↔Android interoperability passed in CI on an x86_64 API 35 emulator.
+- Linux and Android interoperability passed in CI on an x86_64 API 35 emulator.
 - A physical arm64 Android device was not available in the build environment;
   see `docs/COMPATIBILITY.md`.
 

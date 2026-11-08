@@ -43,7 +43,7 @@ x (${VERSION}) unstable; urgency=medium
 
   * Initial release.
   * Offline XChaCha20-Poly1305 and Argon2id text encryption.
-  * Android ARM64 and Ubuntu AMD64 share one payload format.
+  * Android arm64-v8a and Ubuntu amd64 share one payload format.
 
  -- jackh0006 <jackh109867@gmail.com>  Sun, 08 Nov 2026 00:00:00 +0000
 EOF

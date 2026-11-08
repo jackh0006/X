@@ -49,7 +49,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Flutter line coverage | **90.3%** (858/950) | `flutter test --coverage` |
 | Rust line coverage | NOT INSTRUMENTED | all core modules covered by targeted tests; no llvm-cov run |
 | Full CI gate | **PASS** | GitHub Actions run 42522448260 (all five jobs) |
-| Android emulator runtime + Linux↔Android interoperability | **PASS** | GitHub Actions run [42522487923](https://github.com/jackh0006/X/actions/runs/42522487923): Linux fixture decrypted on x86_64 API 35 emulator; Android payload decrypted by Linux core |
+| Android emulator runtime + Linux and Android interoperability | **PASS** | GitHub Actions run [42522487923](https://github.com/jackh0006/X/actions/runs/42522487923): Linux fixture decrypted on x86_64 API 35 emulator; Android payload decrypted by Linux core |
 
 ## Security and supply chain
 
@@ -75,7 +75,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | DEB extraction + executable launch | PASS | extracted `/opt/x/x` ran |
 | DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
-| Android arm64 cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
+| Android arm64-v8a cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
 | Android release APK build | PASS | local 18,892,276 B; published v1.0.1 18,887,652 B, versionCode 2 |
 | APK signature | PASS | `apksigner verify`; RSA-4096, SHA-256 cert `e8169ccc…dcf2` |
 | APK package/arch | PASS | `com.jackh0006.x`; `native-code` is exactly `arm64-v8a` |
