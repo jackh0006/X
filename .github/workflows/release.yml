@@ -110,6 +110,7 @@ jobs:
             sha256sum X-android-universal.apk X-linux-amd64.deb "X-${GITHUB_REF_NAME#v}-source.tar.gz"
             echo '```'
           } > "$RUNNER_TEMP/release-notes.md"
+          cd "$GITHUB_WORKSPACE"
           gh release create "$GITHUB_REF_NAME" \
             --title "X v${GITHUB_REF_NAME#v}" \
             --notes-file "$RUNNER_TEMP/release-notes.md" \
