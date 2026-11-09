@@ -144,9 +144,10 @@ class _SendScreenState extends State<SendScreen> {
   Future<void> _save() async {
     final value = _result;
     if (value == null) return;
+    final filename = widget.settings.exportName;
     if (Platform.isAndroid) {
       try {
-        final saved = await NativeBridge.saveText(value);
+        final saved = await NativeBridge.saveText(value, filename: filename);
         _snack(saved ? 'Encrypted text saved.' : 'Save canceled.');
       } catch (_) {
         _snack('Could not save the file.');
@@ -154,8 +155,14 @@ class _SendScreenState extends State<SendScreen> {
       return;
     }
     try {
+      final folder = widget.settings.exportFolder;
+      if (folder != null && await Directory(folder).exists()) {
+        await File('$folder/$filename').writeAsString(value, flush: true);
+        _snack('Encrypted text saved.');
+        return;
+      }
       final location = await getSaveLocation(
-        suggestedName: 'X-encrypted-message.txt',
+        suggestedName: filename,
         acceptedTypeGroups: const [
           XTypeGroup(label: 'Text', extensions: ['txt']),
         ],

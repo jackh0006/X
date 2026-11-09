@@ -43,7 +43,7 @@ X solves the narrow problem:
 - **Is open source and inspectable.** Apache-2.0, reproducible build steps and a
   public threat model.
 
-## New in v1.1.0
+## New in v1.1.1
 
 - **Encryption phrase QR:** display the phrase as an offline QR for sharing on a
   second device. No camera permission. Android blocks screenshots while the QR
@@ -152,7 +152,7 @@ See [`PRIVACY.md`](PRIVACY.md).
 
 ## Test results
 
-Summary as of v1.1.0 (full evidence in
+Summary as of v1.1.1 (full evidence in
 [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)):
 
 | Area | Result |
@@ -183,7 +183,7 @@ On an Intel Pentium G2030 (2 cores, 3.8 GiB RAM, Ubuntu 24.04):
 | Linux startup to window | 1.36 s | — |
 | Linux max RSS | ~180 MiB | — |
 
-Artifacts: **18.1 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
+Artifacts: **18.0 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
 See [`docs/PERFORMANCE_BENCHMARKS.md`](docs/PERFORMANCE_BENCHMARKS.md).
 
 ## Compatibility
@@ -253,7 +253,9 @@ Those limits are explained in [`THREAT_MODEL.md`](THREAT_MODEL.md) and
 checklist, no-remote-access proof, and incremental test policy are in
 [`docs/CHECKLIST_100.md`](docs/CHECKLIST_100.md),
 [`docs/NO_REMOTE_ACCESS.md`](docs/NO_REMOTE_ACCESS.md), and
-[`docs/TEST_IMPACT.md`](docs/TEST_IMPACT.md). Use a strong,
+[`docs/TEST_IMPACT.md`](docs/TEST_IMPACT.md). Real-world results are in
+[`docs/REAL_WORLD_TESTS.md`](docs/REAL_WORLD_TESTS.md); backup guidance is in
+[`docs/BACKUP.md`](docs/BACKUP.md). Use a strong,
 unique passphrase and exchange it out of band.
 
 ## Developer

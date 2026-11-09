@@ -201,7 +201,7 @@ void main() {
     await tester.tap(find.text('ABOUT').last);
     await tester.pumpAndSettle();
     expect(find.textContaining('No independent security audit'), findsOneWidget);
-    expect(find.textContaining('Version 1.1.0'), findsOneWidget);
+    expect(find.textContaining('Version 1.1.1'), findsOneWidget);
     expect(find.text('APACHE-2.0'), findsOneWidget);
     expect(find.text('Local data'), findsOneWidget);
     expect(find.textContaining('X stores no messages'), findsOneWidget);

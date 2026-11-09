@@ -29,4 +29,4 @@ run the full gate. A module-to-test map is maintained below.
 
 ## Latest tested release
 
-`v1.1.0` — update this line and `docs/TEST_RESULTS.md` for every release.
+`v1.1.1` — update this line and `docs/TEST_RESULTS.md` for every release.

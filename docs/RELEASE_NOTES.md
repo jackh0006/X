@@ -1,6 +1,12 @@
-# X v1.1.0
+# X v1.1.1
 
 An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
+
+## Fixed in v1.1.1
+
+- SEND state is preserved across tab switches.
+- Save uses the configured export folder and filename.
+- Added real-world test and backup reports.
 
 ## Added
 
@@ -28,8 +34,8 @@ An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
 
 | File | Platform |
 |---|---|
-| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 3 |
-| `X-linux-amd64.deb` | Ubuntu amd64, version 1.1.0 |
+| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 4 |
+| `X-linux-amd64.deb` | Ubuntu amd64, version 1.1.1 |
 | `SHA256SUMS` | Both artifacts |
 | `x-1.1.0.cdx.json` | CycloneDX SBOM |
 | `TEST_RESULTS.md` | Test report |

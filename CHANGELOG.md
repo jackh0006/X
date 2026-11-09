@@ -2,6 +2,22 @@
 
 All notable changes are recorded here. The project follows semantic versioning.
 
+## [1.1.1] - 2026-11-09
+
+### Fixed
+
+- SEND message, phrase and result now survive tab switches; screens are kept
+  alive instead of being rebuilt.
+- Save now uses the configured export folder and filename without opening an
+  unexpected file picker.
+
+### Verified
+
+- Copy/save ciphertext with no plaintext leakage.
+- Close/reopen, reinstall, transfer, backup/restore, long text, Unicode,
+  special characters, empty input, and wrong phrase tests.
+- Physical-device testing remains external.
+
 ## [1.1.0] - 2026-11-09
 
 ### Added

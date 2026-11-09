@@ -2,7 +2,7 @@
 
 Environment: Ubuntu 24.04.5 LTS, Intel Pentium G2030 (2 cores), 3.8 GiB RAM,
 Rust 1.98.1, Flutter 3.47.6 / Dart 3.13.5. Date: 2026-11-09.
-Release: **v1.1.0**.
+Release: **v1.1.1**.
 
 Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 **NOT TESTED** = not executed; **N/A** = outside X's scope or not applicable.
@@ -47,6 +47,9 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Mobile layout / large text scaling | PASS | widget test, 1.8× scale |
 | Native FFI round-trip, wrong pass, inspect | PASS | 3 native tests on host |
 | Flutter static analysis | PASS | `flutter analyze`: no issues |
+| Real-world copy/save/transfer | **PASS** | `docs/REAL_WORLD_TESTS.md`; 157-byte ciphertext, no plaintext |
+| Restart/reinstall recovery | **PASS** | saved ciphertext decrypted after reinstall |
+| Backup/restore | **PASS** | private backup + SHA-256 + restore |
 | QR phrase display + warning + close | PASS | widget test |
 | Local data card + paths | PASS | widget test |
 | Exact NFC/NFD phrase behavior | PASS | Rust regression test |
@@ -77,12 +80,12 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Rust release build | PASS | `cargo build --release` |
 | Flutter Linux release build | PASS | `build/linux/x64/release/bundle/x` |
 | Linux launch from built bundle | PASS | real app + screenshots |
-| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.0: 8,939,570 B) |
+| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.1: 8,902,632 B) |
 | DEB extraction + executable launch | PASS | extracted `/opt/x/x` ran |
 | DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
 | Android arm64-v8a cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
-| Android release APK build | PASS | 19,026,855 B; versionCode 3; arm64-v8a; v2/v3 signed |
+| Android release APK build | PASS | 18,895,768 B; versionCode 4; arm64-v8a; v2/v3 signed |
 | APK signature | PASS | `apksigner verify`; RSA-4096 v2/v3, cert `e8169ccc…dcf2` |
 | APK package/arch | PASS | `com.jackh0006.x`; `native-code` exactly `arm64-v8a`; no INTERNET/CAMERA |
 | APK install on physical Android device | NOT TESTED | no device available |

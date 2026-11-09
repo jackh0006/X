@@ -20,7 +20,6 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> {
-  late final PageController _pageController;
   int _index = 0;
 
   static const _destinations = <_Destination>[
@@ -30,26 +29,9 @@ class _HomeShellState extends State<HomeShell> {
     _Destination('ABOUT', Icons.info_outline_rounded, Icons.info_rounded),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
   void _select(int index) {
     if (index == _index) return;
     setState(() => _index = index);
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 220),
-      curve: Curves.easeOutCubic,
-    );
   }
 
   @override
@@ -135,17 +117,15 @@ class _HomeShellState extends State<HomeShell> {
                     color: Theme.of(context).dividerTheme.color,
                   ),
                   Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
+                    child: IndexedStack(
+                      index: _index,
                       children: pages,
                     ),
                   ),
                 ],
               )
-            : PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
+            : IndexedStack(
+                index: _index,
                 children: pages,
               ),
         bottomNavigationBar: desktop
