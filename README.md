@@ -157,7 +157,7 @@ Summary as of v1.1.1 (full evidence in
 
 | Area | Result |
 |---|---|
-| Rust core tests (crypto, parser, limits, FFI) | **28 / 28 PASS** |
+| Rust core tests (crypto, parser, limits, FFI) | **34 / 34 PASS** |
 | Flutter widget + native FFI tests | **15 / 15 PASS**, 81.1% line coverage |
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
@@ -255,7 +255,9 @@ checklist, no-remote-access proof, and incremental test policy are in
 [`docs/NO_REMOTE_ACCESS.md`](docs/NO_REMOTE_ACCESS.md), and
 [`docs/TEST_IMPACT.md`](docs/TEST_IMPACT.md). Real-world results are in
 [`docs/REAL_WORLD_TESTS.md`](docs/REAL_WORLD_TESTS.md); backup guidance is in
-[`docs/BACKUP.md`](docs/BACKUP.md). Use a strong,
+[`docs/BACKUP.md`](docs/BACKUP.md). The strict scorecard and AI-access evidence are in
+[`docs/SECURITY_SCORECARD.md`](docs/SECURITY_SCORECARD.md) and
+[`docs/AI_ACCESS.md`](docs/AI_ACCESS.md). Use a strong,
 unique passphrase and exchange it out of band.
 
 ## Developer

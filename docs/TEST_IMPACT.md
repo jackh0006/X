@@ -17,7 +17,7 @@ run the full gate. A module-to-test map is maintained below.
 
 ## Mandatory release gate
 
-1. 28+ Rust tests, fmt, clippy, audit, deny.
+1. 34+ Rust tests, fmt, clippy, audit, deny.
 2. 15+ Flutter/native tests, analyze, coverage report.
 3. Parser fuzz campaign.
 4. Linux↔Android interoperability.

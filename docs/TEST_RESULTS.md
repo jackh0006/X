@@ -11,7 +11,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 
 | Test | Result | Evidence |
 |---|---|---|
-| Round-trip, Unicode/multilingual | PASS | `cargo test --release`: 28/28 |
+| Round-trip, Unicode/multilingual | PASS | `cargo test --release`: 34/34 |
 | Empty message | PASS | `cargo test --release` |
 | Binary edge cases (NUL, 0xFF) | PASS | `cargo test --release` |
 | Maximum 64 KiB message | PASS | `cargo test --release` |
@@ -28,6 +28,10 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Argon2id cross-check vs independent `argon2` crate | PASS | byte-for-byte test |
 | Property test: envelope encode/decode (256 cases) | PASS | `cargo test --release` |
 | Property test: parser never panics on garbage | PASS | `cargo test --release` |
+| Every header byte mutation rejected | PASS | exhaustive 0..55 regression test |
+| Appended trailing data rejected | PASS | regression test |
+| Identical plaintext produces different payloads | PASS | fresh salt/nonce test |
+| Public API integration tests | PASS | 3 integration tests |
 | libFuzzer parser campaign | PASS (with limitation) | 18,418,323 executions, 31 s, no crash |
 | AddressSanitizer fuzzing | NOT TESTED | vendored libsodium C objects fail ASAN linking; fuzz ran with `-s none` |
 

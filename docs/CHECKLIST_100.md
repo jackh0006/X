@@ -3,7 +3,9 @@
 This is an **in-scope engineering score**, not an independent audit. External
 verification is listed separately and is not counted as passed.
 
-**In-scope score: 100/100. External verification: pending (see below).**
+**Legacy in-scope score: 100/100. The stricter 100-point review is in
+[`SECURITY_SCORECARD.md`](SECURITY_SCORECARD.md): 90.5/100, with physical
+Android testing still failing the critical gate.**
 
 | # | Area | Evidence | Status |
 |---:|---|---|---|
@@ -68,7 +70,7 @@ verification is listed separately and is not counted as passed.
 | 59 | Secret scanning | gitleaks CI | PASS |
 | 60 | Static analysis | clippy + Flutter analyze + CodeQL Actions | PASS |
 | 61 | Error leakage | generic authentication error | PASS |
-| 62 | Unit tests | 28 Rust tests | PASS |
+| 62 | Unit tests | 34 Rust tests | PASS |
 | 63 | Flutter tests | 15 widget/native tests | PASS |
 | 64 | Coverage | Flutter 81.1% lines; Rust not instrumented | PASS* |
 | 65 | Cryptographic regression tests | frozen behavior tests | PASS |

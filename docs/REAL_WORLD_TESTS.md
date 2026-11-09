@@ -5,7 +5,7 @@ plus the Android emulator interoperability workflow.
 
 ## Platform and integrity
 
-- Installed the published v1.1.x `X-linux-amd64.deb` into the user account.
+- Installed the published v1.1.1 `X-linux-amd64.deb` into the user account.
 - `dpkg-deb -I` reports version 1.1.x, amd64.
 - `sha256sum -c` passes for the published artifacts.
 - APK: arm64-v8a only, versionCode 4, no INTERNET/CAMERA permission, v2/v3

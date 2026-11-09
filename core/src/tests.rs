@@ -336,6 +336,49 @@ fn ffi_rejects_null_and_oversized_inputs_without_leaking() {
 }
 
 #[test]
+fn every_header_byte_is_authenticated_or_rejected() {
+    let _guard = kdf_guard();
+    let payload = encrypt(b"header coverage", TEST_PASS, Profile::Standard).unwrap();
+    let decoded = format::decode(&payload).unwrap();
+    for index in 0..format::HEADER_LEN {
+        let mut header = decoded.header_bytes;
+        header[index] ^= 1;
+        let Ok(parsed) = Header::parse(&header) else {
+            continue;
+        };
+        let tampered = format::encode(&parsed, &decoded.ciphertext);
+        assert!(
+            decrypt(&tampered, TEST_PASS).is_err(),
+            "header byte {index} was accepted"
+        );
+    }
+}
+
+#[test]
+fn append_trailing_data_is_rejected() {
+    let _guard = kdf_guard();
+    let payload = encrypt(b"trailing data", TEST_PASS, Profile::Standard).unwrap();
+    let decoded = format::decode(&payload).unwrap();
+    let mut ciphertext = decoded.ciphertext.clone();
+    ciphertext.extend_from_slice(b"trailing");
+    let tampered = format::encode(&decoded.header, &ciphertext);
+    assert_eq!(
+        decrypt(&tampered, TEST_PASS),
+        Err(XError::AuthenticationFailed)
+    );
+}
+
+#[test]
+fn identical_plaintext_produces_distinct_payloads() {
+    let _guard = kdf_guard();
+    let a = encrypt(b"same message", TEST_PASS, Profile::Standard).unwrap();
+    let b = encrypt(b"same message", TEST_PASS, Profile::Standard).unwrap();
+    assert_ne!(a, b);
+    assert_eq!(&decrypt(&a, TEST_PASS).unwrap()[..], b"same message");
+    assert_eq!(&decrypt(&b, TEST_PASS).unwrap()[..], b"same message");
+}
+
+#[test]
 fn passphrase_length_limits() {
     assert_eq!(
         encrypt(b"x", b"short", Profile::Standard),
