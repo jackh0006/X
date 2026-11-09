@@ -28,7 +28,7 @@ jobs:
           cache: true
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
-          targets: aarch64-linux-android
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android
       - name: Install system and Android build tools
         run: |
           sudo apt-get update
