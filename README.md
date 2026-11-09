@@ -183,7 +183,7 @@ On an Intel Pentium G2030 (2 cores, 3.8 GiB RAM, Ubuntu 24.04):
 | Linux startup to window | 1.36 s | — |
 | Linux max RSS | ~180 MiB | — |
 
-Artifacts: **18.0 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
+Artifacts: **17.7 MiB APK**, **8.3 MiB DEB**, **26 MiB installed Linux bundle**.
 See [`docs/PERFORMANCE_BENCHMARKS.md`](docs/PERFORMANCE_BENCHMARKS.md).
 
 ## Compatibility

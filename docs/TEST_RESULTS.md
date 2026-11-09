@@ -80,12 +80,12 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Rust release build | PASS | `cargo build --release` |
 | Flutter Linux release build | PASS | `build/linux/x64/release/bundle/x` |
 | Linux launch from built bundle | PASS | real app + screenshots |
-| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.1: 8,902,632 B) |
+| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.1: 8,705,560 B) |
 | DEB extraction + executable launch | PASS | extracted `/opt/x/x` ran |
 | DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
 | Android arm64-v8a cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
-| Android release APK build | PASS | 18,895,768 B; versionCode 4; arm64-v8a; v2/v3 signed |
+| Android release APK build | PASS | 18,598,759 B; versionCode 4; arm64-v8a; v2/v3 signed |
 | APK signature | PASS | `apksigner verify`; RSA-4096 v2/v3, cert `e8169ccc…dcf2` |
 | APK package/arch | PASS | `com.jackh0006.x`; `native-code` exactly `arm64-v8a`; no INTERNET/CAMERA |
 | APK install on physical Android device | NOT TESTED | no device available |
