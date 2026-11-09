@@ -61,7 +61,7 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | FFI null/oversize rejection | PASS | Rust regression test |
 | Flutter line coverage | **81.1%** (971/1198) | `flutter test --coverage` |
 | Rust line coverage | NOT INSTRUMENTED | all core modules covered by targeted tests; no llvm-cov run |
-| Full CI gate | **PASS** | GitHub Actions run 42553347633 (all five jobs) |
+| Full CI gate | **PASS** | GitHub Actions run 42602988315 (all five jobs) |
 | Android emulator runtime + Linux and Android interoperability | **PASS** | GitHub Actions run [42553378374](https://github.com/jackh0006/X/actions/runs/42553378374): Linux fixture decrypted on x86_64 API 35 emulator; Android payload decrypted by Linux core |
 
 ## Security and supply chain
