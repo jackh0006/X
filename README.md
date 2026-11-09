@@ -36,12 +36,24 @@ X solves the narrow problem:
 - **Makes portable ciphertext.** The output is text starting with `X1.` and can
   travel through anything.
 - **Needs no account or registration.** There is nobody to sign up with.
-- **Needs no X server.** Encryption and decryption are entirely local.
+- **Needs no X-operated server.** Encryption and decryption are entirely local.
 - **Uses your existing messengers.** You choose the transport.
 - **Works across platforms.** Encrypt on Ubuntu, decrypt on Android — or reverse.
-- **Puts the passphrase in your hands.** X never embeds it or stores it.
+- **Puts the encryption phrase in your hands.** X never embeds it or stores it, and can display it as an offline QR for separate sharing.
 - **Is open source and inspectable.** Apache-2.0, reproducible build steps and a
   public threat model.
+
+## New in v1.1.0
+
+- **Encryption phrase QR:** display the phrase as an offline QR for sharing on a
+  second device. No camera permission. Android blocks screenshots while the QR
+  is visible.
+- **Local Data panel:** view app data, cache and preferences paths; copy or open
+  them; delete local app data; change the default export folder and filename.
+- **One icon:** Linux now uses the Android icon artwork as its single source.
+- **APK v2 and v3 signing** in addition to v2.
+- Expanded tests for exact Unicode phrases, maximum-length phrases, FFI input
+  validation, QR, and storage.
 
 ## Screenshots
 
@@ -52,9 +64,9 @@ encryption and a real decryption.
 |---|---|
 | ![SEND with encrypted result](docs/screenshots/send-result-light.png) | ![RECEIVE with decrypted message](docs/screenshots/receive-result-light.png) |
 
-| DONATE | DARK THEME |
+| DONATE | LOCAL DATA |
 |---|---|
-| ![DONATE](docs/screenshots/donate-light.png) | ![Dark theme](docs/screenshots/send-dark.png) |
+| ![DONATE](docs/screenshots/donate-light.png) | ![Local data](docs/screenshots/about-light.png) |
 
 ## Download
 
@@ -75,6 +87,11 @@ installing. See [`INSTALLATION.md`](INSTALLATION.md).
 3. Allow installation from your file manager for this one APK
 4. Open X
 ```
+
+Google Play Protect may show an “unknown app” warning for a sideloaded,
+self-signed APK. That warning cannot be removed by application code. Verify the
+checksum and certificate fingerprint, choose “Install anyway,” or distribute
+through the Play Store. See [`docs/ANDROID_PLAY_PROTECT.md`](docs/ANDROID_PLAY_PROTECT.md).
 
 ### Ubuntu
 
@@ -135,13 +152,13 @@ See [`PRIVACY.md`](PRIVACY.md).
 
 ## Test results
 
-Summary as of v1.0.1 (full evidence in
+Summary as of v1.1.0 (full evidence in
 [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)):
 
 | Area | Result |
 |---|---|
-| Rust core tests (crypto, parser, limits, FFI) | **25 / 25 PASS** |
-| Flutter widget + native FFI tests | **14 / 14 PASS**, 90.3% line coverage |
+| Rust core tests (crypto, parser, limits, FFI) | **28 / 28 PASS** |
+| Flutter widget + native FFI tests | **15 / 15 PASS**, 81.1% line coverage |
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |
@@ -166,14 +183,13 @@ On an Intel Pentium G2030 (2 cores, 3.8 GiB RAM, Ubuntu 24.04):
 | Linux startup to window | 1.36 s | — |
 | Linux max RSS | ~180 MiB | — |
 
-Artifacts: **18.0 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
+Artifacts: **18.1 MiB APK**, **8.5 MiB DEB**, **26 MiB installed Linux bundle**.
 See [`docs/PERFORMANCE_BENCHMARKS.md`](docs/PERFORMANCE_BENCHMARKS.md).
 
 ## Compatibility
 
 - **Ubuntu 24.04.5 LTS amd64** — built, packaged, extracted and launched.
-- **Android arm64-v8a** — release APK built and signature-verified; runtime
-  interoperability is exercised by the CI emulator workflow.
+- **Android arm64-v8a** — release APK built and signature-verified; Linux and Android interoperability is exercised by CI; physical-device testing remains external.
 - Ubuntu 22.04/25.04 and physical Android phones are **not claimed as tested**.
 - Details: [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md).
 
@@ -233,7 +249,11 @@ complete anonymity or messaging solution. It has:
 - no independent audit.
 
 Those limits are explained in [`THREAT_MODEL.md`](THREAT_MODEL.md) and
-[`docs/SECURITY_ASSESSMENT.md`](docs/SECURITY_ASSESSMENT.md). Use a strong,
+[`docs/SECURITY_ASSESSMENT.md`](docs/SECURITY_ASSESSMENT.md). The evidence
+checklist, no-remote-access proof, and incremental test policy are in
+[`docs/CHECKLIST_100.md`](docs/CHECKLIST_100.md),
+[`docs/NO_REMOTE_ACCESS.md`](docs/NO_REMOTE_ACCESS.md), and
+[`docs/TEST_IMPACT.md`](docs/TEST_IMPACT.md). Use a strong,
 unique passphrase and exchange it out of band.
 
 ## Developer

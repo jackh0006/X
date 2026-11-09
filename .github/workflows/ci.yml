@@ -134,6 +134,7 @@ jobs:
           "$BT/apksigner" verify --verbose dist/X-android-arm64.apk
           "$BT/aapt" dump badging dist/X-android-arm64.apk | grep "package: name='com.jackh0006.x'"
           unzip -l dist/X-android-arm64.apk | grep 'lib/arm64-v8a/libx_core.so'
+          bash scripts/no_network_check.sh dist/X-android-arm64.apk
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: X-android-arm64

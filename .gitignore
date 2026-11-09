@@ -54,3 +54,6 @@ Thumbs.db
 # Local tooling
 /.opencode/
 app/coverage/
+
+# Kotlin/Gradle generated
+app/android/.kotlin/

@@ -56,10 +56,10 @@ class _HomeShellState extends State<HomeShell> {
   Widget build(BuildContext context) {
     final desktop = MediaQuery.sizeOf(context).width >= 900;
     final pages = <Widget>[
-      SendScreen(service: widget.service),
+      SendScreen(service: widget.service, settings: widget.settings),
       ReceiveScreen(service: widget.service),
       const DonateScreen(),
-      AboutScreen(service: widget.service),
+      AboutScreen(service: widget.service, settings: widget.settings),
     ];
 
     return GradientBackdrop(

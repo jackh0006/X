@@ -5,15 +5,15 @@
 | Platform | Version / ABI | Status | Evidence |
 |---|---|---|---|
 | Ubuntu | 24.04.5 LTS, amd64 | PASS | Built, packaged, extracted, launched |
-| Android | arm64-v8a, minSdk 24, targetSdk 36 | Build PASS | Signed APK verified; runtime pending |
-| Android emulator | x86_64, API 35 | **PASS** | CI run 42522487923, Linux and Android both directions |
+| Android | arm64-v8a, minSdk 24, targetSdk 36 | Build PASS | Signed APK verified; emulator CI |
+| Android emulator | x86_64, API 35 | PENDING v1.1.0 | workflow runs on the release tag |
 | Ubuntu 22.04 / 25.04 | amd64 | NOT TESTED | dependency names are compatible; binary built on 24.04 |
 | Physical Android phone | arm64-v8a | NOT TESTED | no device available |
 
 ## Android
 
 - Application ID: `com.jackh0006.x`
-- Version: 1.0.1 (versionCode 2)
+- Version: 1.1.0 (versionCode 3)
 - minSdk 24, targetSdk 36, compileSdk 36
 - Native core: `lib/arm64-v8a/libx_core.so`
 - Signing: RSA-4096, APK Signature Scheme v2, certificate SHA-256

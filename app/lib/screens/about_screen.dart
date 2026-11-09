@@ -1,17 +1,179 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/api.dart';
 import '../data/donations.dart';
+import '../settings.dart';
 import '../theme/app_theme.dart';
 import '../widgets/brand_mark.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_heading.dart';
 import '../widgets/surface_card.dart';
 
-class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key, required this.service});
+class AboutScreen extends StatefulWidget {
+  const AboutScreen({super.key, required this.service, required this.settings});
 
   final XService service;
+  final SettingsController settings;
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  late Future<StorageInfo> _storage;
+
+  @override
+  void initState() {
+    super.initState();
+    _storage = widget.settings.storageInfo();
+  }
+
+  void _refresh() {
+    setState(() => _storage = widget.settings.storageInfo());
+  }
+
+  void _snack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _copy(String value) async {
+    await Clipboard.setData(ClipboardData(text: value));
+    _snack('Path copied.');
+  }
+
+  Future<void> _chooseFolder() async {
+    final folder = await widget.settings.chooseExportFolder();
+    if (folder == null) {
+      _snack('Folder selection canceled.');
+      return;
+    }
+    _refresh();
+    _snack('Export folder updated.');
+  }
+
+  Future<void> _rename() async {
+    final controller =
+        TextEditingController(text: widget.settings.exportName);
+    final value = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Export filename'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Filename',
+            helperText: 'Path separators are not allowed.',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (value == null) return;
+    await widget.settings.setExportName(value);
+    _refresh();
+    _snack('Export filename updated.');
+  }
+
+  Future<void> _delete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete local app data?'),
+        content: const Text(
+          'This removes X settings and cache on this device. Files you exported yourself are not deleted.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    await widget.settings.deleteLocalData();
+    _refresh();
+    _snack('Local app data deleted.');
+  }
+
+  Future<void> _openFolder(String path) async {
+    if (!Platform.isLinux) {
+      _snack('Use your file manager to open this path.');
+      return;
+    }
+    try {
+      await Process.run('xdg-open', [path]);
+    } catch (_) {
+      _snack('Could not open the folder.');
+    }
+  }
+
+  Widget _dataPath(
+    BuildContext context,
+    String label,
+    String path,
+    Future<void> Function(String) copy,
+    Future<void> Function(String) open,
+  ) {
+    final text = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(label,
+                  style: text.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
+              IconButton(
+                tooltip: 'Copy $label path',
+                visualDensity: VisualDensity.compact,
+                onPressed: () => copy(path),
+                icon: const Icon(Icons.copy_rounded, size: 16),
+              ),
+              if (Platform.isLinux)
+                IconButton(
+                  tooltip: 'Open $label folder',
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => open(path),
+                  icon: const Icon(Icons.open_in_new_rounded, size: 16),
+                ),
+            ],
+          ),
+          SelectableText(
+            path,
+            style: text.bodySmall?.copyWith(
+              fontFamily: 'monospace',
+              color: scheme.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +203,7 @@ class AboutScreen extends StatelessWidget {
                     Text('X', style: text.headlineSmall),
                     const SizedBox(height: 4),
                     Text(
-                      'Version 1.0.1 · build 2',
+                      'Version 1.1.0 · build 3',
                       style: text.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
@@ -95,6 +257,75 @@ class AboutScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Icon(Icons.folder_outlined, color: scheme.primary, size: 20),
+                  const SizedBox(width: 10),
+                  Text('Local data', style: text.titleMedium),
+                ],
+              ),
+              const VGap(8),
+              Text(
+                'X stores no messages or plaintext. It stores only local settings and the cache. Ciphertext is saved only where you choose.',
+                style: text.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+              ),
+              const VGap(14),
+              FutureBuilder<StorageInfo>(
+                future: _storage,
+                builder: (context, snapshot) {
+                  final info = snapshot.data;
+                  if (info == null) {
+                    return const LinearProgressIndicator();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _dataPath(context, 'App data', info.dataPath, _copy, _openFolder),
+                      _dataPath(context, 'Cache', info.cachePath, _copy, _openFolder),
+                      _dataPath(context, 'Preferences', info.preferencesPath, _copy, _openFolder),
+                      const VGap(10),
+                      Text(
+                        'Export folder: ${info.exportFolder ?? 'Choose a folder each time'}',
+                        style: text.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+                      ),
+                      Text(
+                        'Export filename: ${info.exportName}',
+                        style: text.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+                      ),
+                      const VGap(12),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          OutlinedButton.icon(
+                            onPressed: _chooseFolder,
+                            icon: const Icon(Icons.create_new_folder_outlined, size: 17),
+                            label: const Text('Choose export folder'),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: _rename,
+                            icon: const Icon(Icons.edit_outlined, size: 17),
+                            label: const Text('Change filename'),
+                          ),
+                          TextButton.icon(
+                            onPressed: _delete,
+                            icon: const Icon(Icons.delete_outline_rounded, size: 17),
+                            label: const Text('Delete local data'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        const VGap(16),
+        SurfaceCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text('How it works', style: text.titleMedium),
               const VGap(12),
               const _Bullet(
@@ -114,7 +345,7 @@ class AboutScreen extends StatelessWidget {
               ),
               const VGap(10),
               Text(
-                'Format v1 · XChaCha20-Poly1305-IETF · Argon2id v1.3 · X core ${service.coreVersion}',
+                'Format v1 · XChaCha20-Poly1305-IETF · Argon2id v1.3 · X core ${widget.service.coreVersion}',
                 style: text.bodySmall?.copyWith(
                   color: scheme.onSurfaceVariant,
                   fontFamily: 'monospace',

@@ -2,6 +2,26 @@
 
 All notable changes are recorded here. The project follows semantic versioning.
 
+## [1.1.0] - 2026-11-09
+
+### Added
+
+- Offline QR display for sharing the encryption phrase, with an explicit
+  warning and Android `FLAG_SECURE` while visible.
+- Local Data panel: app/cache/preferences paths, copy and open controls,
+  confirmed deletion, default export folder and filename.
+- Single-source icon artwork for Android and Linux.
+- APK Signature Scheme v2 and v3.
+- A 100-point evidence checklist, no-remote-access evidence, and an incremental
+  test-impact policy.
+
+### Changed
+
+- Version 1.1.0 (Android versionCode 3); release assets remain
+  `X-android-arm64.apk` and `X-linux-amd64.deb`.
+- Expanded tests: exact NFC/NFD phrase behavior, 1,024-byte phrase, FFI
+  null/oversize handling, QR, storage.
+
 ## [1.0.1] - 2026-11-08
 
 ### Fixed

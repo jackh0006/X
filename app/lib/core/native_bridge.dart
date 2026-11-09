@@ -27,6 +27,16 @@ class NativeBridge {
     }
   }
 
+  /// Prevents screenshots and recent-app previews while sensitive QR data is visible.
+  static Future<void> setSecureScreen(bool secure) async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _channel.invokeMethod<void>('setSecureScreen', secure);
+    } catch (_) {
+      // Security UI must still render if the platform channel is unavailable.
+    }
+  }
+
   static Future<bool> saveText(String text, {String filename = 'X-encrypted-message.txt'}) async {
     if (!Platform.isAndroid) return false;
     return await _channel.invokeMethod<bool>(

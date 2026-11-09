@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:x/app.dart';
 import 'package:x/settings.dart';
 
@@ -10,7 +11,7 @@ Future<void> pumpApp(
   WidgetTester tester, {
   ThemeMode mode = ThemeMode.light,
   FakeXService? service,
-  Size size = const Size(1200, 1000),
+  Size size = const Size(1200, 1600),
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -200,8 +201,26 @@ void main() {
     await tester.tap(find.text('ABOUT').last);
     await tester.pumpAndSettle();
     expect(find.textContaining('No independent security audit'), findsOneWidget);
-    expect(find.textContaining('Version 1.0.1'), findsOneWidget);
+    expect(find.textContaining('Version 1.1.0'), findsOneWidget);
     expect(find.text('APACHE-2.0'), findsOneWidget);
+    expect(find.text('Local data'), findsOneWidget);
+    expect(find.textContaining('X stores no messages'), findsOneWidget);
+  });
+
+  testWidgets('send shows a passphrase QR and closes it', (tester) async {
+    await pumpApp(tester);
+    await tester.enterText(find.byKey(const Key('send-passphrase')),
+        'correct horse battery staple');
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('send-qr')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('send-qr')));
+    await tester.pumpAndSettle();
+    expect(find.byType(QrImageView), findsOneWidget);
+    expect(find.textContaining('Anyone who scans'), findsOneWidget);
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+    expect(find.byType(QrImageView), findsNothing);
   });
 
   testWidgets('mobile layout has bottom navigation and no overflow',

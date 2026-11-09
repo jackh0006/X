@@ -7,17 +7,20 @@ import 'package:flutter/services.dart';
 
 import '../core/api.dart';
 import '../core/native_bridge.dart';
+import '../settings.dart';
 import '../theme/app_theme.dart';
 import '../widgets/info_banner.dart';
+import '../widgets/phrase_qr_dialog.dart';
 import '../widgets/page_body.dart';
 import '../widgets/result_card.dart';
 import '../widgets/section_heading.dart';
 import '../widgets/surface_card.dart';
 
 class SendScreen extends StatefulWidget {
-  const SendScreen({super.key, required this.service});
+  const SendScreen({super.key, required this.service, required this.settings});
 
   final XService service;
+  final SettingsController settings;
 
   @override
   State<SendScreen> createState() => _SendScreenState();
@@ -290,6 +293,17 @@ class _SendScreenState extends State<SendScreen> {
               if (_passController.text.isNotEmpty) ...[
                 const VGap(14),
                 _StrengthMeter(strength: strength),
+                const VGap(12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    key: const Key('send-qr'),
+                    onPressed: () => showPhraseQrDialog(
+                        context, _passController.text),
+                    icon: const Icon(Icons.qr_code_2_rounded, size: 18),
+                    label: const Text('Show encryption phrase QR'),
+                  ),
+                ),
               ],
             ],
           ),

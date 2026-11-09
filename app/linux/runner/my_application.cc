@@ -91,6 +91,8 @@ static void my_application_activate(GApplication* application) {
   }
 
   gtk_window_set_default_size(window, 1180, 820);
+  gtk_window_set_icon_name(window, "x");
+  gtk_window_set_default_icon_name("x");
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(

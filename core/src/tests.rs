@@ -283,6 +283,59 @@ fn salt_and_nonce_are_unique() {
 }
 
 #[test]
+fn unicode_normalization_is_exact() {
+    let _guard = kdf_guard();
+    // NFC and NFD render similarly but are different byte sequences. X does
+    // not silently normalize because a changed phrase must never be accepted.
+    let nfc = "café-au-lait-passphrase";
+    let nfd = "cafe\u{301}-au-lait-passphrase";
+    assert_ne!(nfc.as_bytes(), nfd.as_bytes());
+    let payload = encrypt(b"normalization test", nfc.as_bytes(), Profile::Standard).unwrap();
+    assert_eq!(
+        decrypt(&payload, nfd.as_bytes()),
+        Err(XError::AuthenticationFailed)
+    );
+    assert_eq!(
+        &decrypt(&payload, nfc.as_bytes()).unwrap()[..],
+        b"normalization test"
+    );
+}
+
+#[test]
+fn maximum_passphrase_length_roundtrip() {
+    let _guard = kdf_guard();
+    let passphrase = vec![b'Z'; MAX_PASSPHRASE];
+    let payload = encrypt(b"long phrase", &passphrase, Profile::Standard).unwrap();
+    assert_eq!(&decrypt(&payload, &passphrase).unwrap()[..], b"long phrase");
+}
+
+#[test]
+fn ffi_rejects_null_and_oversized_inputs_without_leaking() {
+    let message = b"never leak this plaintext";
+    let pass = b"correct horse battery staple";
+    let result = unsafe {
+        ffi::x_encrypt(
+            message.as_ptr(),
+            MAX_PLAINTEXT + 1,
+            pass.as_ptr(),
+            pass.len(),
+            1,
+        )
+    };
+    let value: serde_json::Value = serde_json::from_str(&ffi::take_string(result)).unwrap();
+    assert_eq!(value["code"], "MESSAGE_TOO_LARGE");
+
+    let result = unsafe { ffi::x_decrypt(std::ptr::null(), 1, pass.as_ptr(), pass.len()) };
+    let json = ffi::take_string(result);
+    let value: serde_json::Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(value["code"], "INVALID_FORMAT");
+    assert!(!json.contains("never leak this plaintext"));
+    assert!(!json.contains("correct horse"));
+
+    unsafe { ffi::x_free_string(std::ptr::null_mut()) };
+}
+
+#[test]
 fn passphrase_length_limits() {
     assert_eq!(
         encrypt(b"x", b"short", Profile::Standard),

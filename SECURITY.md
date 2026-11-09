@@ -21,6 +21,7 @@ credited unless you prefer otherwise.
 
 | Version | Supported |
 |---|---|
+| 1.1.x | Yes |
 | 1.0.x | Yes |
 | < 1.0 | Not released |
 

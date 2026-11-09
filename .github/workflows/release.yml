@@ -87,6 +87,7 @@ jobs:
           "$BT/apksigner" verify --verbose dist/X-android-arm64.apk
           "$BT/aapt" dump badging dist/X-android-arm64.apk | grep "package: name='com.jackh0006.x'"
           unzip -l dist/X-android-arm64.apk | grep 'lib/arm64-v8a/libx_core.so'
+          bash scripts/no_network_check.sh dist/X-android-arm64.apk
           dpkg-deb -I dist/X-linux-amd64.deb
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2

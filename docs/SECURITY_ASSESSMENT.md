@@ -7,7 +7,7 @@ security audit, penetration test, or formal verification.**
 
 Reviewed: Rust core (`core/src`), FFI boundary, Flutter UI and Android/Linux
 platform glue, build scripts, dependency locks, and release configuration.
-Version 1.0.1, 2026-11-08.
+Version 1.1.0, 2026-11-09.
 
 ## Method
 
@@ -31,7 +31,7 @@ Version 1.0.1, 2026-11-08.
 | X-03 | Medium (design) | No sender identity/authentication beyond possession of the passphrase. | Documented |
 | X-04 | Medium (design) | Passphrase exchange is outside X; users can defeat the system by sending it over the same channel. | UI/docs warning |
 | X-05 | Medium (environment) | Dart/OS cannot guarantee erasure of plaintext copies; clipboard and swap risks remain. | Documented |
-| X-06 | Medium (evidence) | Android runtime was validated on an x86_64 API 35 emulator; physical arm64 device was not tested locally. | Emulator PASS (CI run 42522487923); physical pending |
+| X-06 | Medium (evidence) | Android runtime was validated on an x86_64 API 35 emulator; physical arm64 device was not tested locally. | PENDING v1.1.0; physical pending |
 | X-07 | Low (evidence) | Fuzzing could not run with AddressSanitizer because the vendored libsodium C build fails ASAN link; it ran without ASAN. | Documented |
 | X-08 | Low (build) | `dpkg -i` could not be tested without sudo; extraction and execution passed. | Documented |
 | X-09 | Low (supply chain) | Vendored libsodium and crates add supply-chain surface; locks, audits, SBOM and provenance reduce but do not eliminate it. | Mitigated/documented |
@@ -71,7 +71,7 @@ claim.
 | Portability | 8.0/10 | Shared payload and core; Ubuntu and arm64 Android built; runtime evidence pending |
 | Accessibility | 8.0/10 | Large targets, semantics, contrast, 1.8× text-scale test; no formal WCAG audit |
 | Maintainability | 8.0/10 | Small modules, documented format, pinned deps, CI; manual FFI is unsafe code |
-| Test coverage | 7.5/10 | 25 Rust + 14 Flutter/native tests, fuzz; no ASAN and no device tests |
+| Test coverage | 7.5/10 | 28 Rust + 15 Flutter/native tests, fuzz; no ASAN and no device tests |
 | Reproducibility | 6.5/10 | Locked deps, pinned Actions, deterministic DEB timestamps; Flutter/APK builds not bit-identical |
 
 ## Recommendation

@@ -34,7 +34,7 @@ install -m 644 "$ROOT/app/assets/icon/icon_128.png" \
   "$STAGE/usr/share/icons/hicolor/128x128/apps/x.png"
 install -m 644 "$ROOT/app/assets/icon/icon_256.png" \
   "$STAGE/usr/share/icons/hicolor/256x256/apps/x.png"
-install -m 644 "$ROOT/app/assets/icon/icon_linux.png" \
+install -m 644 "$ROOT/app/assets/icon/icon_512.png" \
   "$STAGE/usr/share/icons/hicolor/512x512/apps/x.png"
 install -m 644 "$ROOT/LICENSE" "$STAGE/usr/share/doc/x/copyright"
 
