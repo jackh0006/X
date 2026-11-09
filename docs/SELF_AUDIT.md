@@ -10,7 +10,7 @@ enumerating over USB, no system-wide sudo session available to the agent.
 | Rust tests | `cargo test --release` | **34 PASS** |
 | Flutter analyze | `flutter analyze` | PASS |
 | Flutter tests | `flutter test` | **17 PASS** |
-| Coverage | `flutter test --coverage` | 80.9% lines (measured before final timeout test; recheck on release) |
+| Coverage | `flutter test --coverage` | 81.2% lines (measured before final timeout test; recheck on release) |
 | Parser fuzz | `cargo +nightly fuzz run -s none parse` | 18.4M+ executions, no crash |
 | Header tampering | exhaustive 0..55 test | PASS |
 | Trailing data | regression test | PASS |

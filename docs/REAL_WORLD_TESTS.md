@@ -5,10 +5,10 @@ plus the Android emulator interoperability workflow.
 
 ## Platform and integrity
 
-- Installed the published v1.1.3 `X-linux-amd64.deb` into the user account.
+- Installed the published v1.1.4 `X-linux-amd64.deb` into the user account.
 - `dpkg-deb -I` reports version 1.1.x, amd64.
 - `sha256sum -c` passes for the published artifacts.
-- APK: arm64-v8a only, versionCode 5, no INTERNET/CAMERA permission, v2/v3
+- APK: arm64-v8a, armeabi-v7a, x86_64; versionCode 7, no INTERNET/CAMERA permission, v2/v3
   signature verified.
 - No outbound network connections during a traced Linux launch; only local
   `AF_UNIX` D-Bus/Wayland/accessibility sockets.
@@ -30,7 +30,7 @@ plus the Android emulator interoperability workflow.
 |---|---|---|
 | Close/reopen app | PASS | saved ciphertext remains; Receive decrypts it |
 | Reinstall DEB | PASS | user data and ciphertext persisted; decrypts after reinstall |
-| Move to another device | PASS | CI Linux↔Android v1.1.0; v1.1.3 workflow is the release gate |
+| Move to another device | PASS | CI Linux↔Android v1.1.0; v1.1.4 workflow is the release gate |
 | Wrong encryption phrase | PASS | core CLI returned authentication failure with 0 output bytes |
 | Corrupted/truncated payload | PASS | parser rejects; no plaintext |
 
@@ -65,7 +65,7 @@ encryption phrase is deliberately **not** stored in that folder.
 
 ## Android
 
-The v1.1.0 Linux↔Android emulator workflow passed both directions. The v1.1.3
+The v1.1.0 Linux↔Android emulator workflow passed both directions. The v1.1.4
 release workflow reruns it. Physical-device testing remains external.
 
 ## Remaining external checks

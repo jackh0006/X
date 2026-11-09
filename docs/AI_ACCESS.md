@@ -40,9 +40,9 @@ signature does not match.
 ## Commands
 
 ```bash
-./scripts/no_network_check.sh dist/X-android-arm64.apk
-aapt dump permissions X-android-arm64.apk
+./scripts/no_network_check.sh dist/X-android-universal.apk
+aapt dump permissions X-android-universal.apk
 strace -f -e trace=network -o /tmp/x-net.log ./x
-git verify-tag v1.1.3
+git verify-tag v1.1.4
 sha256sum -c SHA256SUMS
 ```

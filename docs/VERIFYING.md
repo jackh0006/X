@@ -12,7 +12,7 @@ artifacts. A checksum is only useful if you trust the release page.
 ## Android signature
 
 ```bash
-apksigner verify --print-certs X-android-arm64.apk
+apksigner verify --print-certs X-android-universal.apk
 ```
 
 Expected certificate SHA-256:
@@ -40,14 +40,14 @@ Key fingerprint: `CC819EF5E109A1518E840379D8C0CEC84BCCE06B`.
 For a release with GitHub attestations (requires a recent `gh`):
 
 ```bash
-gh attestation verify X-android-arm64.apk --repo jackh0006/X
+gh attestation verify X-android-universal.apk --repo jackh0006/X
 gh attestation verify X-linux-amd64.deb --repo jackh0006/X
 ```
 
 Older `gh` versions can query the attestation API directly:
 
 ```bash
-sha256sum X-android-arm64.apk
+sha256sum X-android-universal.apk
 gh api "repos/jackh0006/X/attestations/sha256:<digest>" --jq '.attestations | length'
 ```
 

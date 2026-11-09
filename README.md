@@ -14,7 +14,7 @@
   <a href="https://github.com/jackh0006/X/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/jackh0006/X?label=release"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-F97316"></a>
   <img alt="Ubuntu 24.04" src="https://img.shields.io/badge/Ubuntu-24.04%20amd64-F97316">
-  <img alt="Android arm64-v8a" src="https://img.shields.io/badge/Android-arm64--v8a-F97316">
+  <img alt="Android universal" src="https://img.shields.io/badge/Android-universal-F97316">
 </p>
 
 ---
@@ -43,7 +43,10 @@ X solves the narrow problem:
 - **Is open source and inspectable.** Apache-2.0, reproducible build steps and a
   public threat model.
 
-## New in v1.1.3
+## New in v1.1.4
+
+- **Encrypted-text QR:** the SEND result can be shown as a QR for short payloads.
+- **Universal Android APK:** armeabi-v7a, arm64-v8a, and x86_64.
 
 - **Encryption phrase QR:** display the phrase as an offline QR for sharing on a
   second device. No camera permission. Android blocks screenshots while the QR
@@ -72,7 +75,7 @@ encryption and a real decryption.
 
 | Platform | Artifact | Requirements |
 |---|---|---|
-| Android | [`X-android-arm64.apk`](https://github.com/jackh0006/X/releases/latest/download/X-android-arm64.apk) | arm64-v8a, Android 7.0+ |
+| Android | [`X-android-universal.apk`](https://github.com/jackh0006/X/releases/latest/download/X-android-universal.apk) | armeabi-v7a, arm64-v8a, x86_64; Android 7.0+ |
 | Ubuntu | [`X-linux-amd64.deb`](https://github.com/jackh0006/X/releases/latest/download/X-linux-amd64.deb) | Ubuntu 24.04 amd64 (tested) |
 
 Each release also includes `SHA256SUMS`, a CycloneDX SBOM, test results and a
@@ -82,7 +85,7 @@ installing. See [`INSTALLATION.md`](INSTALLATION.md).
 ### Android
 
 ```text
-1. Download X-android-arm64.apk
+1. Download X-android-universal.apk
 2. Verify its SHA-256 against SHA256SUMS
 3. Allow installation from your file manager for this one APK
 4. Open X
@@ -152,13 +155,13 @@ See [`PRIVACY.md`](PRIVACY.md).
 
 ## Test results
 
-Summary as of v1.1.3 (full evidence in
+Summary as of v1.1.4 (full evidence in
 [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)):
 
 | Area | Result |
 |---|---|
 | Rust core tests (crypto, parser, limits, FFI) | **34 / 34 PASS** |
-| Flutter widget + native FFI tests | **17 / 17 PASS**, 80.9% line coverage |
+| Flutter widget + native FFI tests | **18 / 18 PASS**, 81.2% line coverage |
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |
@@ -183,13 +186,13 @@ On an Intel Pentium G2030 (2 cores, 3.8 GiB RAM, Ubuntu 24.04):
 | Linux startup to window | 1.36 s | — |
 | Linux max RSS | ~180 MiB | — |
 
-Artifacts: **17.7 MiB APK**, **8.3 MiB DEB**, **26 MiB installed Linux bundle**.
+Artifacts: **49.7 MiB universal APK**, **8.3 MiB DEB**, **26 MiB installed Linux bundle**.
 See [`docs/PERFORMANCE_BENCHMARKS.md`](docs/PERFORMANCE_BENCHMARKS.md).
 
 ## Compatibility
 
 - **Ubuntu 24.04.5 LTS amd64** — built, packaged, extracted and launched.
-- **Android arm64-v8a** — release APK built and signature-verified; Linux and Android interoperability is exercised by CI; physical-device testing remains external.
+- **Android armeabi-v7a / arm64-v8a / x86_64** — release APK built and signature-verified; Linux and Android interoperability is exercised by CI; physical-device testing remains external.
 - Ubuntu 22.04/25.04 and physical Android phones are **not claimed as tested**.
 - Details: [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md).
 
@@ -228,7 +231,7 @@ Validation evidence: [`docs/DONATIONS.md`](docs/DONATIONS.md).
 ./scripts/build-linux.sh
 ./scripts/build-deb.sh
 
-# Android (arm64-v8a)
+# Android (universal)
 export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk/28.2.13676358"
 ./scripts/build-android.sh
 ```

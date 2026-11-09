@@ -61,7 +61,7 @@ cargo install cargo-ndk --locked
 ./scripts/build-android.sh
 ```
 
-Output: `dist/X-android-arm64.apk`, arm64-v8a, signed if
+Output: `dist/X-android-universal.apk`, arm64-v8a, signed if
 `app/android/key.properties` exists.
 
 ### Creating your own release key

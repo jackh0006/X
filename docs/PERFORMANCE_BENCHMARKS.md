@@ -44,8 +44,8 @@ performance reasons.
 |---|---|---|
 | Linux startup to window | **1.36 s** | launch → first X window, 50 ms polling |
 | Linux max RSS | **~180 MiB** | `/usr/bin/time -v`, 8 s run |
-| APK size | 18,599,044 bytes (17.7 MiB) | `stat` |
-| DEB size | 8,709,364 bytes (8.3 MiB) | `stat` |
+| APK size | 52,099,218 bytes (49.7 MiB) | `stat` |
+| DEB size | 8,708,994 bytes (8.3 MiB) | `stat` |
 | Installed Linux bundle | 26 MiB | `du -sh` |
 | DEB installed size (control) | 25,980 KiB | `dpkg-deb -I` |
 

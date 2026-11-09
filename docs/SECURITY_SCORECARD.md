@@ -11,7 +11,7 @@ independent audit. A critical-gate failure overrides the numerical score.
 | 4. Format and parser | 8 | 8.0 | Strict parser, limits, full-header tamper test, trailing-data test |
 | 5. Rust core and FFI | 8 | 8.0 | Null/oversize/UTF-8/panic tests; sanitizer run unavailable |
 | 6. Encryption/decryption correctness | 8 | 7.0 | Round-trips, profiles, cross-platform; physical-device test missing |
-| 7. Testing and fuzzing | 10 | 7.5 | 34 Rust + 17 Flutter tests, fuzz; Rust coverage and ASAN missing |
+| 7. Testing and fuzzing | 10 | 7.5 | 34 Rust + 18 Flutter tests, fuzz; Rust coverage and ASAN missing |
 | 8. Android security | 7 | 5.5 | No permissions, backup off, v2/v3, QR FLAG_SECURE; physical device missing |
 | 9. Linux security | 4 | 4.0 | Actual DEB tested, paths, clipboard, save, no network |
 | 10. Privacy and offline operation | 5 | 5.0 | No network/analytics/accounts; traced launch |
@@ -52,5 +52,5 @@ described as verified-ready for highly sensitive Android text until that is done
 
 ## Latest tested release
 
-`v1.1.3`; test evidence in `TEST_RESULTS.md`, `REAL_WORLD_TESTS.md`, and
+`v1.1.4`; test evidence in `TEST_RESULTS.md`, `REAL_WORLD_TESTS.md`, and
 `NO_REMOTE_ACCESS.md`.

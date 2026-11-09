@@ -74,45 +74,52 @@ jobs:
           ./scripts/build-deb.sh
           ./scripts/build-android.sh
           cd app/android && ./gradlew --stop || true
-      - name: Generate SBOM and checksums
+      - name: Generate source archive
         run: |
-          SBOM="$(python3 scripts/generate_sbom.py | tail -1)"
-          echo "SBOM=$SBOM" >> "$GITHUB_ENV"
-          cd dist
-          sha256sum X-android-arm64.apk X-linux-amd64.deb > SHA256SUMS
-          cat SHA256SUMS
+          mkdir -p dist
+          git archive --format=tar.gz \
+            --prefix="X-${GITHUB_REF_NAME#v}/" \
+            -o "dist/X-${GITHUB_REF_NAME#v}-source.tar.gz" \
+            "$GITHUB_REF_NAME"
       - name: Verify signed APK
         run: |
           BT="$ANDROID_HOME/build-tools/36.0.0"
-          "$BT/apksigner" verify --verbose dist/X-android-arm64.apk
-          "$BT/aapt" dump badging dist/X-android-arm64.apk | grep "package: name='com.jackh0006.x'"
-          unzip -l dist/X-android-arm64.apk | grep 'lib/arm64-v8a/libx_core.so'
-          bash scripts/no_network_check.sh dist/X-android-arm64.apk
+          "$BT/apksigner" verify --verbose dist/X-android-universal.apk
+          "$BT/aapt" dump badging dist/X-android-universal.apk | grep "package: name='com.jackh0006.x'"
+          unzip -l dist/X-android-universal.apk | grep 'lib/arm64-v8a/libx_core.so'
+          unzip -l dist/X-android-universal.apk | grep 'lib/armeabi-v7a/libx_core.so'
+          unzip -l dist/X-android-universal.apk | grep 'lib/x86_64/libx_core.so'
+          bash scripts/no_network_check.sh dist/X-android-universal.apk
           dpkg-deb -I dist/X-linux-amd64.deb
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: |
-            dist/X-android-arm64.apk
+            dist/X-android-universal.apk
             dist/X-linux-amd64.deb
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          {
+            cat docs/RELEASE_NOTES.md
+            echo
+            echo '## SHA-256 checksums'
+            echo '```'
+            cd dist
+            sha256sum X-android-universal.apk X-linux-amd64.deb "X-${GITHUB_REF_NAME#v}-source.tar.gz"
+            echo '```'
+          } > "$RUNNER_TEMP/release-notes.md"
           gh release create "$GITHUB_REF_NAME" \
             --title "X v${GITHUB_REF_NAME#v}" \
-            --notes-file docs/RELEASE_NOTES.md \
-            dist/X-android-arm64.apk \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            dist/X-android-universal.apk \
             dist/X-linux-amd64.deb \
-            dist/SHA256SUMS \
-            "$SBOM" \
-            docs/TEST_RESULTS.md \
-            docs/SECURITY_ASSESSMENT.md
+            "dist/X-${GITHUB_REF_NAME#v}-source.tar.gz"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: x-release-artifacts
           path: |
-            dist/X-android-arm64.apk
+            dist/X-android-universal.apk
             dist/X-linux-amd64.deb
-            dist/SHA256SUMS
-            dist/x-*.cdx.json
+            dist/X-*-source.tar.gz

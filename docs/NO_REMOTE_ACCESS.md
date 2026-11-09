@@ -6,7 +6,7 @@ X is designed so the installed app has no path to a developer server.
 
 - Release manifest has **no `INTERNET` permission**. Verify:
   ```bash
-  aapt dump permissions X-android-arm64.apk | grep INTERNET
+  aapt dump permissions X-android-universal.apk | grep INTERNET
   # no output
   ```
 - No account, login, upload, analytics, crash-reporting, Firebase, or telemetry
@@ -47,8 +47,8 @@ for every release.
 ## Reproduce
 
 ```bash
-./scripts/no_network_check.sh dist/X-android-arm64.apk
-aapt dump permissions X-android-arm64.apk
+./scripts/no_network_check.sh dist/X-android-universal.apk
+aapt dump permissions X-android-universal.apk
 git verify-tag v1.1.0
 sha256sum -c SHA256SUMS
 ```

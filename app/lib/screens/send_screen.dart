@@ -11,6 +11,7 @@ import '../core/native_bridge.dart';
 import '../settings.dart';
 import '../theme/app_theme.dart';
 import '../widgets/info_banner.dart';
+import '../widgets/ciphertext_qr_dialog.dart';
 import '../widgets/phrase_qr_dialog.dart';
 import '../widgets/page_body.dart';
 import '../widgets/result_card.dart';
@@ -457,6 +458,14 @@ class _SendScreenState extends State<SendScreen> {
                   icon: const Icon(Icons.save_alt_rounded, size: 18),
                   label: const Text('Save'),
                 ),
+                if (_result!.length <= 1800)
+                  OutlinedButton.icon(
+                    key: const Key('send-cipher-qr'),
+                    onPressed: () =>
+                        showCiphertextQrDialog(context, _result!),
+                    icon: const Icon(Icons.qr_code_2_rounded, size: 18),
+                    label: const Text('Show QR'),
+                  ),
                 TextButton(onPressed: _clear, child: const Text('Clear')),
               ],
             ),

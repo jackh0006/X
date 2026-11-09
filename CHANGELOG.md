@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. The project follows semantic versioning.
 
-## [1.1.3] - 2026-11-09
+## [1.1.4] - 2026-11-09
 
 ### Fixed
 
@@ -34,7 +34,7 @@ All notable changes are recorded here. The project follows semantic versioning.
 ### Changed
 
 - Version 1.1.0 (Android versionCode 3); release assets remain
-  `X-android-arm64.apk` and `X-linux-amd64.deb`.
+  `X-android-universal.apk` and `X-linux-amd64.deb`.
 - Expanded tests: exact NFC/NFD phrase behavior, 1,024-byte phrase, FFI
   null/oversize handling, QR, storage.
 

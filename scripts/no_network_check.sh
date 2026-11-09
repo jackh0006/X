@@ -3,7 +3,7 @@
 # network client code. Fails closed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-APK="${1:-$ROOT/dist/X-android-arm64.apk}"
+APK="${1:-$ROOT/dist/X-android-universal.apk}"
 AAPT="${AAPT:-${ANDROID_HOME:-$HOME/Android/Sdk}/build-tools/36.0.0/aapt}"
 
 if [[ -f "$APK" ]]; then

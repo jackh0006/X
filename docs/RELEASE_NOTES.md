@@ -1,8 +1,13 @@
-# X v1.1.3
+# X v1.1.4
 
 An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
 
-## Security hardening in v1.1.3
+## Added in v1.1.4
+
+- Encrypted-text QR display in SEND (short payloads).
+- Universal Android APK for armeabi-v7a, arm64-v8a, and x86_64.
+
+## Security hardening in v1.1.4
 
 - Plaintext crosses the native boundary in a caller-owned buffer, not JSON.
 - Dart and native sensitive buffers are overwritten before release.
@@ -39,16 +44,16 @@ An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
 
 ## Artifacts
 
+Only three assets are published:
+
 | File | Platform |
 |---|---|
-| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 6 |
-| `X-linux-amd64.deb` | Ubuntu amd64, version 1.1.3 |
-| `SHA256SUMS` | Both artifacts |
-| `x-1.1.3.cdx.json` | CycloneDX SBOM |
-| `TEST_RESULTS.md` | Test report |
-| `SECURITY_ASSESSMENT.md` | Self-assessment |
+| `X-android-universal.apk` | Android: armeabi-v7a, arm64-v8a, x86_64 |
+| `X-linux-amd64.deb` | Ubuntu amd64 |
+| `X-1.1.4-source.tar.gz` | Exact tagged source |
 
-The authoritative checksums are in `SHA256SUMS`.
+Test results and security evidence remain in the repository under `docs/`.
+The release body contains the artifact hashes.
 
 ## Android installation
 

@@ -12,7 +12,7 @@ an APK; Google decides whether to trust that signing identity. Options:
 1. Tap **More details → Install anyway** after verifying the artifact.
 2. Install through `adb` on a development device:
    ```bash
-   adb install -r X-android-arm64.apk
+   adb install -r X-android-universal.apk
    ```
 3. Publish through the Google Play Store (not currently configured).
 
@@ -20,7 +20,7 @@ an APK; Google decides whether to trust that signing identity. Options:
 
 ```bash
 sha256sum -c SHA256SUMS
-apksigner verify --print-certs X-android-arm64.apk
+apksigner verify --print-certs X-android-universal.apk
 ```
 
 Expected certificate SHA-256:

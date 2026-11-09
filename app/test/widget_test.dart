@@ -210,10 +210,29 @@ void main() {
     await tester.tap(find.text('ABOUT').last);
     await tester.pumpAndSettle();
     expect(find.textContaining('No independent security audit'), findsOneWidget);
-    expect(find.textContaining('Version 1.1.3'), findsOneWidget);
+    expect(find.textContaining('Version 1.1.4'), findsOneWidget);
     expect(find.text('APACHE-2.0'), findsOneWidget);
     expect(find.text('Local data'), findsOneWidget);
     expect(find.textContaining('X stores no messages'), findsOneWidget);
+  });
+
+  testWidgets('send shows an encrypted-text QR and closes it', (tester) async {
+    await pumpApp(tester);
+    await tester.enterText(find.byKey(const Key('send-message')), 'qr ciphertext');
+    await tester.enterText(find.byKey(const Key('send-passphrase')),
+        'correct horse battery staple');
+    await tester.ensureVisible(find.widgetWithText(FilledButton, 'Encrypt message'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Encrypt message'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('send-cipher-qr')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('send-cipher-qr')));
+    await tester.pumpAndSettle();
+    expect(find.byType(QrImageView), findsOneWidget);
+    expect(find.textContaining('encrypted X1 text only'), findsOneWidget);
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('send shows a passphrase QR and closes it', (tester) async {

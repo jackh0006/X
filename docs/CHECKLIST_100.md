@@ -72,7 +72,7 @@ Android testing still failing the critical gate.**
 | 61 | Error leakage | generic authentication error | PASS |
 | 62 | Unit tests | 34 Rust tests | PASS |
 | 63 | Flutter tests | 15 widget/native tests | PASS |
-| 64 | Coverage | Flutter 80.9% lines; Rust not instrumented | PASS* |
+| 64 | Coverage | Flutter 81.2% lines; Rust not instrumented | PASS* |
 | 65 | Cryptographic regression tests | frozen behavior tests | PASS |
 | 66 | Differential crypto tests | RustCrypto + argon2 | PASS |
 | 67 | Large/Unicode tests | regression tests | PASS |

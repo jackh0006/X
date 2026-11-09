@@ -131,14 +131,16 @@ jobs:
       - name: Verify APK
         run: |
           BT="$ANDROID_HOME/build-tools/36.0.0"
-          "$BT/apksigner" verify --verbose dist/X-android-arm64.apk
-          "$BT/aapt" dump badging dist/X-android-arm64.apk | grep "package: name='com.jackh0006.x'"
-          unzip -l dist/X-android-arm64.apk | grep 'lib/arm64-v8a/libx_core.so'
-          bash scripts/no_network_check.sh dist/X-android-arm64.apk
+          "$BT/apksigner" verify --verbose dist/X-android-universal.apk
+          "$BT/aapt" dump badging dist/X-android-universal.apk | grep "package: name='com.jackh0006.x'"
+          unzip -l dist/X-android-universal.apk | grep 'lib/arm64-v8a/libx_core.so'
+          unzip -l dist/X-android-universal.apk | grep 'lib/armeabi-v7a/libx_core.so'
+          unzip -l dist/X-android-universal.apk | grep 'lib/x86_64/libx_core.so'
+          bash scripts/no_network_check.sh dist/X-android-universal.apk
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: X-android-arm64
-          path: dist/X-android-arm64.apk
+          name: X-android-universal
+          path: dist/X-android-universal.apk
           if-no-files-found: error
 
   secrets:

@@ -2,7 +2,7 @@
 
 Environment: Ubuntu 24.04.5 LTS, Intel Pentium G2030 (2 cores), 3.8 GiB RAM,
 Rust 1.98.1, Flutter 3.47.6 / Dart 3.13.5. Date: 2026-11-09.
-Release: **v1.1.3**.
+Release: **v1.1.4**.
 
 Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 **NOT TESTED** = not executed; **N/A** = outside X's scope or not applicable.
@@ -87,12 +87,12 @@ Legend: **PASS** = executed and passed; **FAIL** = executed and failed;
 | Rust release build | PASS | `cargo build --release` |
 | Flutter Linux release build | PASS | `build/linux/x64/release/bundle/x` |
 | Linux launch from built bundle | PASS | real app + screenshots |
-| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.3: 8,705,560 B) |
+| DEB structure and metadata | PASS | `dpkg-deb -I`, `-c` (local v1.1.4: 8,705,560 B) |
 | DEB extraction + executable launch | PASS | extracted `/opt/x/x` ran |
 | DEB fake-root `dpkg` unpack/configure | PASS | `dpkg --root=/tmp/xroot --force-not-root`; status `install ok installed` |
 | DEB system install with `dpkg -i` | NOT TESTED | requires sudo unavailable in build environment |
 | Android arm64-v8a cross-compile | PASS | `libx_core.so` in `jniLibs/arm64-v8a` |
-| Android release APK build | PASS | 18,599,044 B; versionCode 6; arm64-v8a; v2/v3 signed |
+| Android release APK build | PASS | 52,099,218 B; versionCode 7; arm64-v8a/armeabi-v7a/x86_64; v2/v3 signed |
 | APK signature | PASS | `apksigner verify`; RSA-4096 v2/v3, cert `e8169ccc…dcf2` |
 | APK package/arch | PASS | `com.jackh0006.x`; `native-code` exactly `arm64-v8a`; no INTERNET/CAMERA |
 | APK install on physical Android device | NOT TESTED | no device available |

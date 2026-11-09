@@ -4,11 +4,11 @@
 
 Requirements: Android 7.0 (API 24) or newer, **arm64-v8a** device.
 
-1. Download `X-android-arm64.apk` from
+1. Download `X-android-universal.apk` from
    [Releases](https://github.com/jackh0006/X/releases/latest).
 2. Verify the SHA-256 checksum from the same release:
    ```bash
-   sha256sum X-android-arm64.apk
+   sha256sum X-android-universal.apk
    ```
    Compare with `SHA256SUMS`.
 3. Allow your browser/file manager to install unknown apps, then open the APK.

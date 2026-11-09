@@ -24,7 +24,7 @@ Android:
 ```bash
 export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk/28.2.13676358"
 ./scripts/build-android.sh
-$ANDROID_HOME/build-tools/36.0.0/apksigner verify --print-certs dist/X-android-arm64.apk
+$ANDROID_HOME/build-tools/36.0.0/apksigner verify --print-certs dist/X-android-universal.apk
 ```
 
 ## Module → test map

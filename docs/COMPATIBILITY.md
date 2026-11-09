@@ -5,7 +5,7 @@
 | Platform | Version / ABI | Status | Evidence |
 |---|---|---|---|
 | Ubuntu | 24.04.5 LTS, amd64 | PASS | Built, packaged, extracted, launched |
-| Android | arm64-v8a, minSdk 24, targetSdk 36 | Build PASS | Signed APK verified; emulator CI |
+| Android | armeabi-v7a, arm64-v8a, x86_64; minSdk 24, targetSdk 36 | Build PASS | Universal APK signature/ABI verified; emulator CI |
 | Android emulator | x86_64, API 35 | **PASS** | CI run 42630568802, Linux and Android both directions |
 | Ubuntu 22.04 / 25.04 | amd64 | NOT TESTED | dependency names are compatible; binary built on 24.04 |
 | Physical Android phone | arm64-v8a | NOT TESTED | no device available |
@@ -13,9 +13,9 @@
 ## Android
 
 - Application ID: `com.jackh0006.x`
-- Version: 1.1.3 (versionCode 6)
+- Version: 1.1.4 (versionCode 7)
 - minSdk 24, targetSdk 36, compileSdk 36
-- Native core: `lib/arm64-v8a/libx_core.so`
+- Native cores: `lib/armeabi-v7a/libx_core.so`, `lib/arm64-v8a/libx_core.so`, `lib/x86_64/libx_core.so`
 - Signing: RSA-4096, APK Signature Scheme v2, certificate SHA-256
   `E8:16:9C:CC:4F:6A:77:B8:6A:44:B8:B6:89:38:F0:DD:7E:79:AA:0F:66:A6:34:3A:2F:3E:5B:88:01:C3:DC:F2`
 - Permissions: no `INTERNET`; only the AndroidX-generated
@@ -23,8 +23,8 @@
 - Backup disabled (`allowBackup=false`)
 - Share and save use Android system intents (no storage permission)
 
-The APK's `native-code` list is exactly `arm64-v8a`; no 32-bit or x86 stubs
-are packaged. The supported and tested target is **arm64-v8a**.
+The APK packages three ABIs: **armeabi-v7a, arm64-v8a, x86_64**. Physical
+arm64/x86 hardware testing remains external.
 
 ## Ubuntu
 
