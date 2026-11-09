@@ -1,10 +1,17 @@
-# X v1.1.2
+# X v1.1.3
 
 An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
 
+## Security hardening in v1.1.3
+
+- Plaintext crosses the native boundary in a caller-owned buffer, not JSON.
+- Dart and native sensitive buffers are overwritten before release.
+- Linux save is atomic; Android cleans up partial documents.
+- Two-minute inactivity clearing added.
+
 ## Security lifecycle changes
 
-- SEND state is preserved across tab switches.
+- SEND/RECEIVE sensitive state clears on tab switches and backgrounding.
 - Save uses the configured export folder and filename.
 - Added real-world test and backup reports.
 
@@ -34,10 +41,10 @@ An offline-first encrypted text utility for Ubuntu amd64 and Android arm64-v8a.
 
 | File | Platform |
 |---|---|
-| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 5 |
-| `X-linux-amd64.deb` | Ubuntu amd64, version 1.1.2 |
+| `X-android-arm64.apk` | Android arm64-v8a, minSdk 24, versionCode 6 |
+| `X-linux-amd64.deb` | Ubuntu amd64, version 1.1.3 |
 | `SHA256SUMS` | Both artifacts |
-| `x-1.1.0.cdx.json` | CycloneDX SBOM |
+| `x-1.1.3.cdx.json` | CycloneDX SBOM |
 | `TEST_RESULTS.md` | Test report |
 | `SECURITY_ASSESSMENT.md` | Self-assessment |
 

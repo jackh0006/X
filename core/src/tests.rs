@@ -22,6 +22,28 @@ fn synthetic(header: &Header) -> String {
     format::encode(header, &[0u8; TAG_LEN])
 }
 
+fn ffi_decrypt(payload: &[u8], pass: &[u8], capacity: usize) -> (i32, Vec<u8>) {
+    let mut out = vec![0u8; capacity];
+    let mut len = 0usize;
+    let code = unsafe {
+        ffi::x_decrypt(
+            payload.as_ptr(),
+            payload.len(),
+            pass.as_ptr(),
+            pass.len(),
+            out.as_mut_ptr(),
+            out.len(),
+            &mut len,
+        )
+    };
+    if code == 0 && len <= out.len() {
+        out.truncate(len);
+    } else {
+        out.clear();
+    }
+    (code, out)
+}
+
 #[test]
 fn aead_matches_rustcrypto_xchacha20poly1305() {
     use chacha20poly1305::aead::{Aead, Payload};
@@ -325,12 +347,9 @@ fn ffi_rejects_null_and_oversized_inputs_without_leaking() {
     let value: serde_json::Value = serde_json::from_str(&ffi::take_string(result)).unwrap();
     assert_eq!(value["code"], "MESSAGE_TOO_LARGE");
 
-    let result = unsafe { ffi::x_decrypt(std::ptr::null(), 1, pass.as_ptr(), pass.len()) };
-    let json = ffi::take_string(result);
-    let value: serde_json::Value = serde_json::from_str(&json).unwrap();
-    assert_eq!(value["code"], "INVALID_FORMAT");
-    assert!(!json.contains("never leak this plaintext"));
-    assert!(!json.contains("correct horse"));
+    let (code, out) = ffi_decrypt(b"not a payload", pass, 1024);
+    assert_eq!(code, 1);
+    assert!(out.is_empty());
 
     unsafe { ffi::x_free_string(std::ptr::null_mut()) };
 }
@@ -418,19 +437,33 @@ fn ffi_roundtrip_and_error_shape() {
     assert_eq!(value["ok"], true);
     let payload = value["value"].as_str().unwrap().to_string();
 
-    let ptr = unsafe { ffi::x_decrypt(payload.as_ptr(), payload.len(), pass.as_ptr(), pass.len()) };
-    let json = ffi::take_string(ptr);
-    let value: serde_json::Value = serde_json::from_str(&json).unwrap();
-    assert_eq!(value["ok"], true);
-    assert_eq!(value["value"], message);
+    let (code, out) = ffi_decrypt(payload.as_bytes(), pass, 4096);
+    assert_eq!(code, 0);
+    assert_eq!(&out[..], message.as_bytes());
 
-    let bad = "not a payload";
-    let ptr = unsafe { ffi::x_decrypt(bad.as_ptr(), bad.len(), pass.as_ptr(), pass.len()) };
-    let json = ffi::take_string(ptr);
-    let value: serde_json::Value = serde_json::from_str(&json).unwrap();
-    assert_eq!(value["ok"], false);
-    assert_eq!(value["code"], "INVALID_FORMAT");
-    assert!(!value.to_string().contains(message));
+    let (code, out) = ffi_decrypt(b"not a payload", pass, 4096);
+    assert_eq!(code, 1);
+    assert!(out.is_empty());
+
+    let (code, _) = ffi_decrypt(payload.as_bytes(), b"wrong passphrase", 4096);
+    assert_eq!(code, 10);
+
+    let (code, _) = ffi_decrypt(payload.as_bytes(), pass, 1);
+    assert_eq!(code, 7);
+
+    let mut len = 0usize;
+    let code = unsafe {
+        ffi::x_decrypt(
+            payload.as_ptr(),
+            payload.len(),
+            pass.as_ptr(),
+            pass.len(),
+            std::ptr::null_mut(),
+            4096,
+            &mut len,
+        )
+    };
+    assert_eq!(code, 1);
 
     assert!(ffi::_version_is_exported());
 }

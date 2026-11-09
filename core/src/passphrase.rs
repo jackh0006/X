@@ -60,8 +60,9 @@ mod tests {
     fn generated_passphrases_have_expected_shape() {
         for words in [4, 7, 12] {
             let p = generate(words).unwrap();
-            assert_eq!(p.split('-').count(), words);
-            assert!(p.len() >= words * 2);
+            let parts: Vec<&str> = p.split('-').collect();
+            assert_eq!(parts.len(), words);
+            assert!(parts.iter().all(|part| !part.is_empty()));
         }
     }
 

@@ -43,6 +43,6 @@ signature does not match.
 ./scripts/no_network_check.sh dist/X-android-arm64.apk
 aapt dump permissions X-android-arm64.apk
 strace -f -e trace=network -o /tmp/x-net.log ./x
-git verify-tag v1.1.2
+git verify-tag v1.1.3
 sha256sum -c SHA256SUMS
 ```

@@ -210,7 +210,7 @@ void main() {
     await tester.tap(find.text('ABOUT').last);
     await tester.pumpAndSettle();
     expect(find.textContaining('No independent security audit'), findsOneWidget);
-    expect(find.textContaining('Version 1.1.2'), findsOneWidget);
+    expect(find.textContaining('Version 1.1.3'), findsOneWidget);
     expect(find.text('APACHE-2.0'), findsOneWidget);
     expect(find.text('Local data'), findsOneWidget);
     expect(find.textContaining('X stores no messages'), findsOneWidget);
@@ -230,6 +230,22 @@ void main() {
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
     expect(find.byType(QrImageView), findsNothing);
+  });
+
+  testWidgets('inactivity clears sensitive SEND fields', (tester) async {
+    await pumpApp(tester);
+    await tester.enterText(find.byKey(const Key('send-message')), 'idle secret');
+    await tester.enterText(find.byKey(const Key('send-passphrase')),
+        'idle-passphrase');
+    await tester.pump(const Duration(minutes: 2, seconds: 1));
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-message'))).controller!.text,
+      isEmpty,
+    );
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-passphrase'))).controller!.text,
+      isEmpty,
+    );
   });
 
   testWidgets('leaving and returning clears sensitive SEND fields',

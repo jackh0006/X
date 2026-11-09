@@ -13,7 +13,7 @@
 ## Android
 
 - Application ID: `com.jackh0006.x`
-- Version: 1.1.2 (versionCode 5)
+- Version: 1.1.3 (versionCode 6)
 - minSdk 24, targetSdk 36, compileSdk 36
 - Native core: `lib/arm64-v8a/libx_core.so`
 - Signing: RSA-4096, APK Signature Scheme v2, certificate SHA-256

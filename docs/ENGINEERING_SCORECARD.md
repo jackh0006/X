@@ -14,7 +14,7 @@ Scores are evidence-based and deliberately not 100/100. See
 | Portability | 8.0 | One Rust core and format for Ubuntu/Android; runtime interoperability pending CI |
 | Accessibility | 8.0 | Semantics, large targets, contrast, 1.8× scale test; no WCAG audit |
 | Maintainability | 8.0 | Small modules, docs, CI, pinned dependencies; unsafe FFI surface |
-| Test coverage | 7.5 | 34 Rust + 16 Flutter/native tests; 18.4M fuzz runs; no ASAN/device tests |
+| Test coverage | 7.5 | 34 Rust + 17 Flutter/native tests; 18.4M fuzz runs; no ASAN/device tests |
 | Reproducibility | 6.5 | Locked deps, pinned Actions, deterministic DEB timestamps; APK not bit-reproducible |
 
 **Overall: 7.8/10 (weighted toward security and evidence).**

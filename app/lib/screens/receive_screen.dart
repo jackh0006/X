@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../core/clipboard_guard.dart';
 
 import '../core/api.dart';
@@ -24,12 +27,40 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   bool _busy = false;
   String? _result;
   String? _error;
+  Timer? _idleTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _payloadController.addListener(_changed);
+    _passController.addListener(_changed);
+    _armIdle();
+  }
 
   @override
   void dispose() {
+    _idleTimer?.cancel();
+    _payloadController.removeListener(_changed);
+    _passController.removeListener(_changed);
     _payloadController.dispose();
     _passController.dispose();
     super.dispose();
+  }
+
+  void _changed() => _armIdle();
+
+  void _armIdle() {
+    _idleTimer?.cancel();
+    if (_payloadController.text.isEmpty &&
+        _passController.text.isEmpty &&
+        _result == null) {
+      return;
+    }
+    _idleTimer = Timer(const Duration(minutes: 2), () {
+      if (!mounted) return;
+      _clear();
+      _snack('Sensitive fields cleared after 2 minutes of inactivity.');
+    });
   }
 
   void _snack(String message) {
@@ -66,6 +97,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
         _result = value;
         _passController.clear();
       });
+      _armIdle();
       _snack('Decrypted locally. Nothing was sent anywhere.');
     } on XFailure catch (failure) {
       if (!mounted) return;
@@ -87,6 +119,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   }
 
   void _clear() {
+    _idleTimer?.cancel();
     _payloadController.clear();
     _passController.clear();
     setState(() {
@@ -99,127 +132,131 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return PageBody(
-      children: [
-        const SectionHeading(
-          eyebrow: 'Receive',
-          title: 'Open a sealed message.',
-          subtitle:
-              'Paste the encrypted text and enter the passphrase you received separately. Verification happens here, on this device.',
-        ),
-        const VGap(22),
-        SurfaceCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const FieldLabel('ENCRYPTED TEXT'),
-              TextField(
-                key: const Key('receive-payload'),
-                controller: _payloadController,
-                minLines: 5,
-                maxLines: 9,
-                keyboardType: TextInputType.multiline,
-                autocorrect: false,
-                enableSuggestions: false,
-                decoration: const InputDecoration(
-                  hintText: 'Paste the X1.… text here…',
-                ),
-              ),
-            ],
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => _armIdle(),
+      child: PageBody(
+        children: [
+          const SectionHeading(
+            eyebrow: 'Receive',
+            title: 'Open a sealed message.',
+            subtitle: 'Paste the encrypted text and enter the passphrase you received separately. Verification happens here, on this device.',
           ),
-        ),
-        const VGap(14),
-        SurfaceCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const FieldLabel('PASSPHRASE'),
-              TextField(
-                key: const Key('receive-passphrase'),
-                controller: _passController,
-                obscureText: _obscure,
-                autocorrect: false,
-                enableSuggestions: false,
-                smartDashesType: SmartDashesType.disabled,
-                smartQuotesType: SmartQuotesType.disabled,
-                onSubmitted: (_) {
-                  if (!_busy) _decrypt();
-                },
-                decoration: InputDecoration(
-                  hintText: 'The passphrase you received…',
-                  suffixIcon: IconButton(
-                    tooltip: _obscure ? 'Show passphrase' : 'Hide passphrase',
-                    icon: Icon(
-                      _obscure
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      size: 20,
-                    ),
-                    onPressed: () => setState(() => _obscure = !_obscure),
+          const VGap(22),
+          SurfaceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const FieldLabel('ENCRYPTED TEXT'),
+                TextField(
+                  key: const Key('receive-payload'),
+                  controller: _payloadController,
+                  minLines: 5,
+                  maxLines: 9,
+                  keyboardType: TextInputType.multiline,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  decoration: const InputDecoration(
+                    hintText: 'Paste the X1.… text here…',
                   ),
                 ),
-              ),
-              const VGap(10),
-              Text(
-                'Passphrases are case-sensitive. Spaces and punctuation must match exactly.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
+              ],
+            ),
+          ),
+          const VGap(14),
+          SurfaceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const FieldLabel('PASSPHRASE'),
+                TextField(
+                  key: const Key('receive-passphrase'),
+                  controller: _passController,
+                  obscureText: _obscure,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  smartDashesType: SmartDashesType.disabled,
+                  smartQuotesType: SmartQuotesType.disabled,
+                  onSubmitted: (_) {
+                    if (!_busy) _decrypt();
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'The passphrase you received…',
+                    suffixIcon: IconButton(
+                      tooltip: _obscure ? 'Show passphrase' : 'Hide passphrase',
+                      icon: Icon(
+                        _obscure
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 20,
+                      ),
+                      onPressed: () => setState(() => _obscure = !_obscure),
                     ),
-              ),
-            ],
+                  ),
+                ),
+                const VGap(10),
+                Text(
+                  'Passphrases are case-sensitive. Spaces and punctuation must match exactly.',
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
+                ),
+              ],
+            ),
           ),
-        ),
-        const VGap(16),
-        InfoBanner(
-          icon: Icons.verified_user_outlined,
-          tone: BannerTone.neutral,
-          message:
-              'A failed check is never treated as success. If the text was altered or the passphrase is wrong, X refuses to show a message.',
-        ),
-        const VGap(20),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: _busy ? null : _decrypt,
-            icon: _busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2.2),
-                  )
-                : const Icon(Icons.lock_open_rounded, size: 20),
-            label: Text(_busy ? 'Verifying…' : 'Decrypt message'),
-          ),
-        ),
-        if (_error != null) ...[
           const VGap(16),
-          InfoBanner(
-            icon: Icons.gpp_bad_outlined,
-            tone: BannerTone.error,
-            message: _error!,
+          const InfoBanner(
+            icon: Icons.verified_user_outlined,
+            tone: BannerTone.neutral,
+            message: 'A failed check is never treated as success. If the text was altered or the passphrase is wrong, X refuses to show a message.',
           ),
-        ],
-        if (_result != null) ...[
+          const VGap(10),
+          const InfoBanner(
+            icon: Icons.timer_outlined,
+            tone: BannerTone.neutral,
+            message: 'Decrypted text and fields clear after 2 minutes without typing or pointer activity.',
+          ),
           const VGap(20),
-          ResultCard(
-            title: 'Decrypted message',
-            value: _result!,
-            onCopy: _copy,
-            footnote: 'Authenticated locally. This message was not uploaded.',
-            actions: [
-              OutlinedButton.icon(
-                onPressed: _copy,
-                icon: const Icon(Icons.copy_rounded, size: 18),
-                label: const Text('Copy'),
-              ),
-              TextButton(
-                onPressed: _clear,
-                child: const Text('Clear'),
-              ),
-            ],
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _busy ? null : _decrypt,
+              icon: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2.2),
+                    )
+                  : const Icon(Icons.lock_open_rounded, size: 20),
+              label: Text(_busy ? 'Verifying…' : 'Decrypt message'),
+            ),
           ),
+          if (_error != null) ...[
+            const VGap(16),
+            InfoBanner(
+              icon: Icons.gpp_bad_outlined,
+              tone: BannerTone.error,
+              message: _error!,
+            ),
+          ],
+          if (_result != null) ...[
+            const VGap(20),
+            ResultCard(
+              title: 'Decrypted message',
+              value: _result!,
+              onCopy: _copy,
+              footnote: 'Authenticated locally. This message was not uploaded.',
+              actions: [
+                OutlinedButton.icon(
+                  onPressed: _copy,
+                  icon: const Icon(Icons.copy_rounded, size: 18),
+                  label: const Text('Copy'),
+                ),
+                TextButton(onPressed: _clear, child: const Text('Clear')),
+              ],
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

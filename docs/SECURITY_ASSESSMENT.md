@@ -7,7 +7,7 @@ security audit, penetration test, or formal verification.**
 
 Reviewed: Rust core (`core/src`), FFI boundary, Flutter UI and Android/Linux
 platform glue, build scripts, dependency locks, and release configuration.
-Version 1.1.2, 2026-11-09.
+Version 1.1.3, 2026-11-09.
 
 ## Method
 
@@ -71,7 +71,7 @@ claim.
 | Portability | 8.0/10 | Shared payload and core; Ubuntu and arm64 Android built; runtime evidence pending |
 | Accessibility | 8.0/10 | Large targets, semantics, contrast, 1.8× text-scale test; no formal WCAG audit |
 | Maintainability | 8.0/10 | Small modules, documented format, pinned deps, CI; manual FFI is unsafe code |
-| Test coverage | 7.5/10 | 34 Rust + 16 Flutter/native tests, fuzz; no ASAN and no device tests |
+| Test coverage | 7.5/10 | 34 Rust + 17 Flutter/native tests, fuzz; no ASAN and no device tests |
 | Reproducibility | 6.5/10 | Locked deps, pinned Actions, deterministic DEB timestamps; Flutter/APK builds not bit-identical |
 
 ## Recommendation

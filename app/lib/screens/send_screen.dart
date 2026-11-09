@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -35,16 +36,19 @@ class _SendScreenState extends State<SendScreen> {
   String? _result;
   String? _error;
   int _messageBytes = 0;
+  Timer? _idleTimer;
 
   @override
   void initState() {
     super.initState();
     _messageController.addListener(_messageChanged);
     _passController.addListener(_passChanged);
+    _armIdle();
   }
 
   @override
   void dispose() {
+    _idleTimer?.cancel();
     _messageController.removeListener(_messageChanged);
     _passController.removeListener(_passChanged);
     _messageController.dispose();
@@ -57,9 +61,27 @@ class _SendScreenState extends State<SendScreen> {
     if (bytes != _messageBytes) {
       setState(() => _messageBytes = bytes);
     }
+    _armIdle();
   }
 
-  void _passChanged() => setState(() {});
+  void _passChanged() {
+    setState(() {});
+    _armIdle();
+  }
+
+  void _armIdle() {
+    _idleTimer?.cancel();
+    if (_messageController.text.isEmpty &&
+        _passController.text.isEmpty &&
+        _result == null) {
+      return;
+    }
+    _idleTimer = Timer(const Duration(minutes: 2), () {
+      if (!mounted) return;
+      _clear();
+      _snack('Sensitive fields cleared after 2 minutes of inactivity.');
+    });
+  }
 
   void _snack(String message) {
     if (!mounted) return;
@@ -101,7 +123,10 @@ class _SendScreenState extends State<SendScreen> {
         _result = value;
         _obscure = true;
       });
-      _snack('Encrypted locally. Plaintext and phrase cleared from this screen.');
+      _armIdle();
+      _snack(
+        'Encrypted locally. Plaintext and phrase cleared from this screen.',
+      );
     } on XFailure catch (failure) {
       if (!mounted) return;
       setState(() => _error = failure.message);
@@ -146,6 +171,21 @@ class _SendScreenState extends State<SendScreen> {
     }
   }
 
+  Future<void> _atomicWrite(String path, String value) async {
+    final target = File(path);
+    final temp = File(
+      '${target.path}.x-tmp-${DateTime.now().microsecondsSinceEpoch}',
+    );
+    try {
+      await temp.writeAsString(value, flush: true);
+      await temp.rename(target.path);
+    } finally {
+      if (await temp.exists()) {
+        await temp.delete();
+      }
+    }
+  }
+
   Future<void> _save() async {
     final value = _result;
     if (value == null) return;
@@ -162,7 +202,7 @@ class _SendScreenState extends State<SendScreen> {
     try {
       final folder = widget.settings.exportFolder;
       if (folder != null && await Directory(folder).exists()) {
-        await File('$folder/$filename').writeAsString(value, flush: true);
+        await _atomicWrite('$folder/$filename', value);
         _snack('Encrypted text saved.');
         return;
       }
@@ -173,7 +213,7 @@ class _SendScreenState extends State<SendScreen> {
         ],
       );
       if (location == null) return;
-      await File(location.path).writeAsString(value, flush: true);
+      await _atomicWrite(location.path, value);
       _snack('Encrypted text saved.');
     } catch (_) {
       _snack('Could not save the file.');
@@ -181,6 +221,7 @@ class _SendScreenState extends State<SendScreen> {
   }
 
   void _clear() {
+    _idleTimer?.cancel();
     _messageController.clear();
     _passController.clear();
     setState(() {
@@ -194,243 +235,247 @@ class _SendScreenState extends State<SendScreen> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final strength = _strength(_passController.text);
-    return PageBody(
-      children: [
-        const SectionHeading(
-          eyebrow: 'Send',
-          title: 'Seal a message.',
-          subtitle:
-              'Write anything sensitive, protect it with a passphrase, and send the encrypted text through any messenger or email.',
-        ),
-        const VGap(22),
-        SurfaceCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FieldLabel(
-                'MESSAGE',
-                trailing: Text(
-                  '$_messageBytes / 65536 bytes',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: _messageBytes > 65536
-                            ? scheme.error
-                            : scheme.onSurfaceVariant,
-                      ),
-                ),
-              ),
-              TextField(
-                key: const Key('send-message'),
-                controller: _messageController,
-                minLines: 6,
-                maxLines: 10,
-                keyboardType: TextInputType.multiline,
-                textCapitalization: TextCapitalization.sentences,
-                
-                decoration: const InputDecoration(
-                  hintText: 'Write or paste the message you want to protect…',
-                ),
-              ),
-            ],
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => _armIdle(),
+      child: PageBody(
+        children: [
+          const SectionHeading(
+            eyebrow: 'Send',
+            title: 'Seal a message.',
+            subtitle: 'Write anything sensitive, protect it with a passphrase, and send the encrypted text through any messenger or email.',
           ),
-        ),
-        const VGap(14),
-        SurfaceCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FieldLabel(
-                'PASSPHRASE',
-                trailing: Text(
-                  'Never included in the output',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                ),
-              ),
-              TextField(
-                key: const Key('send-passphrase'),
-                controller: _passController,
-                obscureText: _obscure,
-                autocorrect: false,
-                enableSuggestions: false,
-                smartDashesType: SmartDashesType.disabled,
-                smartQuotesType: SmartQuotesType.disabled,
-                
-                decoration: InputDecoration(
-                  hintText: 'Enter a strong passphrase…',
-                  suffixIcon: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: _obscure ? 'Show passphrase' : 'Hide passphrase',
-                        icon: Icon(
-                          _obscure
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          size: 20,
-                        ),
-                        onPressed: () => setState(() => _obscure = !_obscure),
-                      ),
-                      IconButton(
-                        tooltip: 'Copy passphrase',
-                        icon: const Icon(Icons.copy_rounded, size: 19),
-                        onPressed: _passController.text.isEmpty
-                            ? null
-                            : () => _copy(
-                                  _passController.text,
-                                  'Passphrase copied. Share it separately.',
-                                ),
-                      ),
-                    ],
+          const VGap(22),
+          SurfaceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FieldLabel(
+                  'MESSAGE',
+                  trailing: Text(
+                    '$_messageBytes / 65536 bytes',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: _messageBytes > 65536
+                          ? scheme.error
+                          : scheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-              ),
-              const VGap(12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: _busy ? null : _generate,
-                  child: const Wrap(
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 8,
-                    runSpacing: 4,
-                    children: [
-                      Icon(Icons.auto_awesome_rounded, size: 18),
-                      Text('Generate strong passphrase'),
-                    ],
-                  ),
-                ),
-              ),
-              if (_passController.text.isNotEmpty) ...[
-                const VGap(14),
-                _StrengthMeter(strength: strength),
-                const VGap(12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    key: const Key('send-qr'),
-                    onPressed: () => showPhraseQrDialog(
-                        context, _passController.text),
-                    icon: const Icon(Icons.qr_code_2_rounded, size: 18),
-                    label: const Text('Show encryption phrase QR'),
+                TextField(
+                  key: const Key('send-message'),
+                  controller: _messageController,
+                  minLines: 6,
+                  maxLines: 10,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
+
+                  decoration: const InputDecoration(
+                    hintText: 'Write or paste the message you want to protect…',
                   ),
                 ),
               ],
-            ],
+            ),
           ),
-        ),
-        const VGap(14),
-        SurfaceCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const FieldLabel('KEY STRENGTH'),
-              SegmentedButton<SecurityProfile>(
-                segments: const [
-                  ButtonSegment(
-                    value: SecurityProfile.standard,
-                    label: Text('Standard'),
+          const VGap(14),
+          SurfaceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FieldLabel(
+                  'PASSPHRASE',
+                  trailing: Text(
+                    'Never included in the output',
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: scheme.onSurfaceVariant),
                   ),
-                  ButtonSegment(
-                    value: SecurityProfile.high,
-                    label: Text('High'),
+                ),
+                TextField(
+                  key: const Key('send-passphrase'),
+                  controller: _passController,
+                  obscureText: _obscure,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  smartDashesType: SmartDashesType.disabled,
+                  smartQuotesType: SmartQuotesType.disabled,
+
+                  decoration: InputDecoration(
+                    hintText: 'Enter a strong passphrase…',
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          tooltip: _obscure
+                              ? 'Show passphrase'
+                              : 'Hide passphrase',
+                          icon: Icon(
+                            _obscure
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            size: 20,
+                          ),
+                          onPressed: () => setState(() => _obscure = !_obscure),
+                        ),
+                        IconButton(
+                          tooltip: 'Copy passphrase',
+                          icon: const Icon(Icons.copy_rounded, size: 19),
+                          onPressed: _passController.text.isEmpty
+                              ? null
+                              : () => _copy(
+                                  _passController.text,
+                                  'Passphrase copied. Share it separately.',
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const VGap(12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: _busy ? null : _generate,
+                    child: const Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: [
+                        Icon(Icons.auto_awesome_rounded, size: 18),
+                        Text('Generate strong passphrase'),
+                      ],
+                    ),
+                  ),
+                ),
+                if (_passController.text.isNotEmpty) ...[
+                  const VGap(14),
+                  _StrengthMeter(strength: strength),
+                  const VGap(12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      key: const Key('send-qr'),
+                      onPressed: () =>
+                          showPhraseQrDialog(context, _passController.text),
+                      icon: const Icon(Icons.qr_code_2_rounded, size: 18),
+                      label: const Text('Show encryption phrase QR'),
+                    ),
                   ),
                 ],
-                selected: {_profile},
-                showSelectedIcon: false,
-                onSelectionChanged: _busy
-                    ? null
-                    : (selection) =>
-                        setState(() => _profile = selection.first),
-              ),
-              const VGap(10),
-              Text(
-                '${_profile.detail}. ${_profile.description}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                      height: 1.45,
+              ],
+            ),
+          ),
+          const VGap(14),
+          SurfaceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const FieldLabel('KEY STRENGTH'),
+                SegmentedButton<SecurityProfile>(
+                  segments: const [
+                    ButtonSegment(
+                      value: SecurityProfile.standard,
+                      label: Text('Standard'),
                     ),
-              ),
-            ],
-          ),
-        ),
-        const VGap(16),
-        const InfoBanner(
-          icon: Icons.key_off_rounded,
-          tone: BannerTone.brand,
-          message:
-              'The passphrase is never embedded in the encrypted text. Send it to the recipient through a different channel, or agree on it in person.',
-        ),
-        const VGap(20),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: _busy ? null : _encrypt,
-            icon: _busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2.2),
-                  )
-                : const Icon(Icons.lock_rounded, size: 20),
-            label: Text(_busy ? 'Encrypting…' : 'Encrypt message'),
-          ),
-        ),
-        if (_error != null) ...[
-          const VGap(16),
-          InfoBanner(
-            icon: Icons.error_outline_rounded,
-            tone: BannerTone.error,
-            message: _error!,
-          ),
-        ],
-        if (_result != null) ...[
-          const VGap(20),
-          ResultCard(
-            title: 'Encrypted text',
-            value: _result!,
-            monospace: true,
-            onCopy: () => _copy(_result!, 'Encrypted text copied.'),
-            footnote:
-                'Portable text. The recipient still needs the separate passphrase.',
-            actions: [
-              OutlinedButton.icon(
-                onPressed: () => _copy(_result!, 'Encrypted text copied.'),
-                icon: const Icon(Icons.copy_rounded, size: 18),
-                label: const Text('Copy'),
-              ),
-              if (NativeBridge.supportsShare)
-                OutlinedButton.icon(
-                  onPressed: _share,
-                  icon: const Icon(Icons.ios_share_rounded, size: 18),
-                  label: const Text('Share'),
+                    ButtonSegment(
+                      value: SecurityProfile.high,
+                      label: Text('High'),
+                    ),
+                  ],
+                  selected: {_profile},
+                  showSelectedIcon: false,
+                  onSelectionChanged: _busy
+                      ? null
+                      : (selection) =>
+                            setState(() => _profile = selection.first),
                 ),
-              OutlinedButton.icon(
-                onPressed: _save,
-                icon: const Icon(Icons.save_alt_rounded, size: 18),
-                label: const Text('Save'),
-              ),
-              TextButton(
-                onPressed: _clear,
-                child: const Text('Clear'),
-              ),
-            ],
+                const VGap(10),
+                Text(
+                  '${_profile.detail}. ${_profile.description}',
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant, height: 1.45),
+                ),
+              ],
+            ),
           ),
+          const VGap(16),
+          const InfoBanner(
+            icon: Icons.key_off_rounded,
+            tone: BannerTone.brand,
+            message: 'The passphrase is never embedded in the encrypted text. Send it to the recipient through a different channel, or agree on it in person.',
+          ),
+          const VGap(10),
+          const InfoBanner(
+            icon: Icons.timer_outlined,
+            tone: BannerTone.neutral,
+            message: 'Sensitive fields clear automatically after 2 minutes without typing or pointer activity.',
+          ),
+          const VGap(20),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _busy ? null : _encrypt,
+              icon: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2.2),
+                    )
+                  : const Icon(Icons.lock_rounded, size: 20),
+              label: Text(_busy ? 'Encrypting…' : 'Encrypt message'),
+            ),
+          ),
+          if (_error != null) ...[
+            const VGap(16),
+            InfoBanner(
+              icon: Icons.error_outline_rounded,
+              tone: BannerTone.error,
+              message: _error!,
+            ),
+          ],
+          if (_result != null) ...[
+            const VGap(20),
+            ResultCard(
+              title: 'Encrypted text',
+              value: _result!,
+              monospace: true,
+              onCopy: () => _copy(_result!, 'Encrypted text copied.'),
+              footnote: 'Portable text. The recipient still needs the separate passphrase.',
+              actions: [
+                OutlinedButton.icon(
+                  onPressed: () => _copy(_result!, 'Encrypted text copied.'),
+                  icon: const Icon(Icons.copy_rounded, size: 18),
+                  label: const Text('Copy'),
+                ),
+                if (NativeBridge.supportsShare)
+                  OutlinedButton.icon(
+                    onPressed: _share,
+                    icon: const Icon(Icons.ios_share_rounded, size: 18),
+                    label: const Text('Share'),
+                  ),
+                OutlinedButton.icon(
+                  onPressed: _save,
+                  icon: const Icon(Icons.save_alt_rounded, size: 18),
+                  label: const Text('Save'),
+                ),
+                TextButton(onPressed: _clear, child: const Text('Clear')),
+              ],
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 
   _Strength _strength(String value) {
-    if (value.isEmpty) return const _Strength(0, 'Enter a passphrase', AppTheme.orange);
+    if (value.isEmpty) {
+      return const _Strength(0, 'Enter a passphrase', AppTheme.orange);
+    }
     final length = utf8.encode(value).length;
     var score = 0;
     if (length >= 8) score++;
     if (length >= 12) score++;
     if (length >= 16) score++;
-    if (RegExp(r'[a-z]').hasMatch(value) &&
-        RegExp(r'[A-Z]').hasMatch(value)) {
+    if (RegExp(r'[a-z]').hasMatch(value) && RegExp(r'[A-Z]').hasMatch(value)) {
       score++;
     }
     if (RegExp(r'\d').hasMatch(value)) score++;
@@ -478,10 +523,8 @@ class _StrengthMeter extends StatelessWidget {
         const SizedBox(width: 12),
         Text(
           strength.label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: strength.color,
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(context).textTheme.labelMedium
+              ?.copyWith(color: strength.color, fontWeight: FontWeight.w700),
         ),
       ],
     );

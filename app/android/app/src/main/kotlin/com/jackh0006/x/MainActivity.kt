@@ -66,6 +66,11 @@ class MainActivity : FlutterActivity() {
             }
             result?.success(true)
         } catch (_: Exception) {
+            try {
+                contentResolver.delete(uri, null, null)
+            } catch (_: Exception) {
+                // Best effort cleanup of a partial document.
+            }
             result?.success(false)
         }
     }
@@ -205,20 +210,26 @@ class MainActivity : FlutterActivity() {
                     val safeName = filename.replace("/", "_").replace("\\", "_")
                     val folder = prefs().getString("export_folder_uri", null)
                     if (folder != null) {
+                        var created: Uri? = null
                         try {
                             val tree = Uri.parse(folder)
                             val parent = DocumentsContract.buildDocumentUriUsingTree(
                                 tree,
                                 DocumentsContract.getTreeDocumentId(tree)
                             )
-                            val uri = DocumentsContract.createDocument(
+                            created = DocumentsContract.createDocument(
                                 contentResolver, parent, "text/plain", safeName
                             ) ?: throw IllegalStateException("No document")
-                            contentResolver.openOutputStream(uri)?.use {
+                            contentResolver.openOutputStream(created)?.use {
                                 it.write(text.toByteArray(Charsets.UTF_8))
                             }
                             result.success(true)
                         } catch (_: Exception) {
+                            try {
+                                created?.let { contentResolver.delete(it, null, null) }
+                            } catch (_: Exception) {
+                                // Best effort cleanup.
+                            }
                             result.success(false)
                         }
                         return@setMethodCallHandler

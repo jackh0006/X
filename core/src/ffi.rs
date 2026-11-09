@@ -1,10 +1,11 @@
 //! Minimal C ABI for Flutter's `dart:ffi`.
 //!
-//! Every function returns a heap-allocated JSON string:
-//!   success: {"ok":true,"value":"..."}
-//!   failure: {"ok":false,"code":"...","message":"..."}
+//! Ciphertext-producing and metadata functions return a JSON string that must
+//! be released with `x_free_string`.
 //!
-//! The caller must release the returned pointer with `x_free_string`.
+//! Decryption **never** serializes plaintext. `x_decrypt` writes the
+//! authenticated bytes into a caller-owned buffer and returns a numeric status.
+//! The caller must overwrite that buffer before releasing it.
 
 #[cfg(test)]
 use std::ffi::CStr;
@@ -85,6 +86,25 @@ fn profile_from_id(id: u32) -> Result<Profile, XError> {
     }
 }
 
+/// Stable numeric error codes for the plaintext buffer API.
+fn error_code(error: &XError) -> i32 {
+    match error {
+        XError::InvalidFormat(_) => 1,
+        XError::UnsupportedVersion(_) => 2,
+        XError::UnsupportedAlgorithm(_) => 3,
+        XError::UnsupportedKdf(_) => 4,
+        XError::InvalidKdfParameters => 5,
+        XError::PayloadTooLarge => 6,
+        XError::MessageTooLarge => 7,
+        XError::PassphraseTooShort => 8,
+        XError::PassphraseTooLong => 9,
+        XError::AuthenticationFailed => 10,
+        XError::NonUtf8 => 11,
+        XError::CryptoFailure => 12,
+        XError::Internal => 99,
+    }
+}
+
 /// Encrypt UTF-8 bytes. Returns the `X1.…` payload.
 ///
 /// # Safety
@@ -116,29 +136,53 @@ pub unsafe extern "C" fn x_encrypt(
     }
 }
 
-/// Decrypt a payload. Returns the plaintext as UTF-8, or an error.
+/// Decrypt a payload into a caller-owned buffer.
+///
+/// Returns `0` on success, otherwise one of the stable numeric error codes.
+/// Plaintext is never placed in JSON or a C string.
 ///
 /// # Safety
-/// All pointers must be valid for the given lengths. The returned pointer must
-/// be released with [`x_free_string`].
+/// All pointers must be valid for the given lengths. `out` must point to at
+/// least `out_capacity` writable bytes, and `out_len` must be writable. The
+/// caller owns and must zeroize the output buffer.
 #[no_mangle]
 pub unsafe extern "C" fn x_decrypt(
     payload: *const u8,
     payload_len: usize,
     passphrase: *const u8,
     passphrase_len: usize,
-) -> *mut c_char {
-    match catch_unwind(AssertUnwindSafe(|| {
+    out: *mut u8,
+    out_capacity: usize,
+    out_len: *mut usize,
+) -> i32 {
+    match catch_unwind(AssertUnwindSafe(|| -> Result<usize, XError> {
+        if out_len.is_null() {
+            return Err(XError::InvalidFormat("null output length"));
+        }
+        if out.is_null() {
+            return Err(XError::InvalidFormat("null output buffer"));
+        }
         if passphrase_len > MAX_PASSPHRASE {
             return Err(XError::PassphraseTooLong);
         }
         let payload = payload_str(payload, payload_len)?;
         let pass = unsafe { input(passphrase, passphrase_len, MAX_PASSPHRASE)? };
         let plaintext = decrypt(payload, pass)?;
-        String::from_utf8(plaintext.to_vec()).map_err(|_| XError::NonUtf8)
+        if plaintext.len() > out_capacity {
+            return Err(XError::MessageTooLarge);
+        }
+        unsafe {
+            std::ptr::copy_nonoverlapping(plaintext.as_ptr(), out, plaintext.len());
+            std::ptr::write(out_len, plaintext.len());
+        }
+        Ok(plaintext.len())
     })) {
-        Ok(result) => reply(result),
-        Err(_) => internal_error(),
+        Ok(Ok(length)) => {
+            let _ = length;
+            0
+        }
+        Ok(Err(error)) => error_code(&error),
+        Err(_) => 99,
     }
 }
 

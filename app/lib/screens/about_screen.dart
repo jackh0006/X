@@ -203,7 +203,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     Text('X', style: text.headlineSmall),
                     const SizedBox(height: 4),
                     Text(
-                      'Version 1.1.2 · build 5',
+                      'Version 1.1.3 · build 6',
                       style: text.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
