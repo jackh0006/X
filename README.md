@@ -43,7 +43,7 @@ X solves the narrow problem:
 - **Is open source and inspectable.** Apache-2.0, reproducible build steps and a
   public threat model.
 
-## New in v1.1.1
+## New in v1.1.2
 
 - **Encryption phrase QR:** display the phrase as an offline QR for sharing on a
   second device. No camera permission. Android blocks screenshots while the QR
@@ -152,13 +152,13 @@ See [`PRIVACY.md`](PRIVACY.md).
 
 ## Test results
 
-Summary as of v1.1.1 (full evidence in
+Summary as of v1.1.2 (full evidence in
 [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)):
 
 | Area | Result |
 |---|---|
 | Rust core tests (crypto, parser, limits, FFI) | **34 / 34 PASS** |
-| Flutter widget + native FFI tests | **15 / 15 PASS**, 81.1% line coverage |
+| Flutter widget + native FFI tests | **16 / 16 PASS**, 80.7% line coverage |
 | Algorithm cross-checks vs RustCrypto / `argon2` | **PASS** |
 | Parser fuzzing | **18,418,323 runs, no crash** |
 | clippy / fmt / `cargo audit` / `cargo deny` | **PASS** |

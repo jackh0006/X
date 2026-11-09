@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../core/native_bridge.dart';
+import '../core/clipboard_guard.dart';
 import '../theme/app_theme.dart';
 import 'info_banner.dart';
 import 'surface_card.dart';
@@ -25,25 +24,15 @@ class PhraseQrDialog extends StatefulWidget {
 }
 
 class _PhraseQrDialogState extends State<PhraseQrDialog> {
-  @override
-  void initState() {
-    super.initState();
-    NativeBridge.setSecureScreen(true);
-  }
-
-  @override
-  void dispose() {
-    NativeBridge.setSecureScreen(false);
-    super.dispose();
-  }
-
   Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: widget.phrase));
+    await copySensitive(widget.phrase);
     if (!mounted) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        const SnackBar(content: Text('Encryption phrase copied.')),
+        const SnackBar(
+          content: Text('Encryption phrase copied; cleanup attempted after 60 seconds.'),
+        ),
       );
   }
 

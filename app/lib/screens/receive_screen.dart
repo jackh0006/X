@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../core/clipboard_guard.dart';
 
 import '../core/api.dart';
 import '../widgets/info_banner.dart';
@@ -69,6 +69,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
       _snack('Decrypted locally. Nothing was sent anywhere.');
     } on XFailure catch (failure) {
       if (!mounted) return;
+      _passController.clear();
       setState(() => _error = failure.message);
     } catch (_) {
       if (!mounted) return;
@@ -81,8 +82,8 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   Future<void> _copy() async {
     final value = _result;
     if (value == null) return;
-    await Clipboard.setData(ClipboardData(text: value));
-    _snack('Message copied.');
+    await copySensitive(value);
+    _snack('Message copied. Clipboard cleanup attempted after 60 seconds.');
   }
 
   void _clear() {

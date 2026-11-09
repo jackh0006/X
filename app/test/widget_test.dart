@@ -76,11 +76,20 @@ void main() {
 
     expect(find.text('Encrypted text'), findsOneWidget);
     expect(find.text(FakeXService.cannedPayload), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-message'))).controller!.text,
+      isEmpty,
+    );
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-passphrase'))).controller!.text,
+      isEmpty,
+    );
     await tester.ensureVisible(find.widgetWithText(OutlinedButton, 'Copy'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(OutlinedButton, 'Copy'));
     await tester.pumpAndSettle();
     expect(clipboard, FakeXService.cannedPayload);
+    await tester.pump(const Duration(seconds: 61));
   });
 
   testWidgets('send generates a strong passphrase', (tester) async {
@@ -201,7 +210,7 @@ void main() {
     await tester.tap(find.text('ABOUT').last);
     await tester.pumpAndSettle();
     expect(find.textContaining('No independent security audit'), findsOneWidget);
-    expect(find.textContaining('Version 1.1.1'), findsOneWidget);
+    expect(find.textContaining('Version 1.1.2'), findsOneWidget);
     expect(find.text('APACHE-2.0'), findsOneWidget);
     expect(find.text('Local data'), findsOneWidget);
     expect(find.textContaining('X stores no messages'), findsOneWidget);
@@ -221,6 +230,26 @@ void main() {
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
     expect(find.byType(QrImageView), findsNothing);
+  });
+
+  testWidgets('leaving and returning clears sensitive SEND fields',
+      (tester) async {
+    await pumpApp(tester);
+    await tester.enterText(find.byKey(const Key('send-message')), 'temporary secret');
+    await tester.enterText(find.byKey(const Key('send-passphrase')),
+        'temporary-passphrase');
+    await tester.tap(find.text('RECEIVE').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('SEND').last);
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-message'))).controller!.text,
+      isEmpty,
+    );
+    expect(
+      tester.widget<TextField>(find.byKey(const Key('send-passphrase'))).controller!.text,
+      isEmpty,
+    );
   });
 
   testWidgets('mobile layout has bottom navigation and no overflow',

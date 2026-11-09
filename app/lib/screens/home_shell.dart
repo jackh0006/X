@@ -19,8 +19,9 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends State<HomeShell> {
+class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   int _index = 0;
+  int _epoch = 0;
 
   static const _destinations = <_Destination>[
     _Destination('SEND', Icons.north_east_rounded, Icons.send_rounded),
@@ -29,19 +30,53 @@ class _HomeShellState extends State<HomeShell> {
     _Destination('ABOUT', Icons.info_outline_rounded, Icons.info_rounded),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      setState(() => _epoch++);
+    }
+  }
+
   void _select(int index) {
     if (index == _index) return;
-    setState(() => _index = index);
+    setState(() {
+      _index = index;
+      _epoch++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final desktop = MediaQuery.sizeOf(context).width >= 900;
     final pages = <Widget>[
-      SendScreen(service: widget.service, settings: widget.settings),
-      ReceiveScreen(service: widget.service),
+      SendScreen(
+        key: ValueKey('send-$_epoch'),
+        service: widget.service,
+        settings: widget.settings,
+      ),
+      ReceiveScreen(
+        key: ValueKey('receive-$_epoch'),
+        service: widget.service,
+      ),
       const DonateScreen(),
-      AboutScreen(service: widget.service, settings: widget.settings),
+      AboutScreen(
+        key: ValueKey('about-$_epoch'),
+        service: widget.service,
+        settings: widget.settings,
+      ),
     ];
 
     return GradientBackdrop(

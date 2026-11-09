@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../core/api.dart';
+import '../core/clipboard_guard.dart';
 import '../core/native_bridge.dart';
 import '../settings.dart';
 import '../theme/app_theme.dart';
@@ -95,8 +95,13 @@ class _SendScreenState extends State<SendScreen> {
         profile: _profile,
       );
       if (!mounted) return;
-      setState(() => _result = value);
-      _snack('Encrypted locally. Share the passphrase separately.');
+      _passController.clear();
+      _messageController.clear();
+      setState(() {
+        _result = value;
+        _obscure = true;
+      });
+      _snack('Encrypted locally. Plaintext and phrase cleared from this screen.');
     } on XFailure catch (failure) {
       if (!mounted) return;
       setState(() => _error = failure.message);
@@ -126,8 +131,8 @@ class _SendScreenState extends State<SendScreen> {
   }
 
   Future<void> _copy(String value, String message) async {
-    await Clipboard.setData(ClipboardData(text: value));
-    _snack(message);
+    await copySensitive(value);
+    _snack('$message Clipboard cleanup attempted after 60 seconds.');
   }
 
   Future<void> _share() async {

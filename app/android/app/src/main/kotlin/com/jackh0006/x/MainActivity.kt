@@ -2,6 +2,7 @@ package com.jackh0006.x
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.content.Intent
 import android.net.Uri
 import android.provider.DocumentsContract
@@ -11,6 +12,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
     private var pendingText: String? = null
     private var pendingResult: MethodChannel.Result? = null
     private var pendingFolderResult: MethodChannel.Result? = null
