@@ -165,7 +165,7 @@ Summary as of v1.1.2 (full evidence in
 | CI incl. gitleaks, CodeQL, dependency review | **PASS** |
 | APK build, signature, arm64 core | **PASS** |
 | DEB build, metadata, extraction, launch | **PASS** |
-| Android emulator + cross-platform | **PASS** (CI run 42553378374) |
+| Android emulator + cross-platform | **PASS** (CI run 42613468188) |
 | Physical Android device runtime | **NOT TESTED** |
 | System-wide `dpkg -i` | **NOT TESTED** (needs sudo) |
 

@@ -31,7 +31,7 @@ Version 1.1.2, 2026-11-09.
 | X-03 | Medium (design) | No sender identity/authentication beyond possession of the passphrase. | Documented |
 | X-04 | Medium (design) | Passphrase exchange is outside X; users can defeat the system by sending it over the same channel. | UI/docs warning |
 | X-05 | Medium (environment) | Dart/OS cannot guarantee erasure of plaintext copies; clipboard and swap risks remain. | Documented |
-| X-06 | Medium (evidence) | Android runtime was validated on an x86_64 API 35 emulator; physical arm64 device was not tested locally. | Emulator PASS (CI run 42553378374); physical pending |
+| X-06 | Medium (evidence) | Android runtime was validated on an x86_64 API 35 emulator; physical arm64 device was not tested locally. | Emulator PASS (CI run 42613468188); physical pending |
 | X-07 | Low (evidence) | Fuzzing could not run with AddressSanitizer because the vendored libsodium C build fails ASAN link; it ran without ASAN. | Documented |
 | X-08 | Low (build) | `dpkg -i` could not be tested without sudo; extraction and execution passed. | Documented |
 | X-09 | Low (supply chain) | Vendored libsodium and crates add supply-chain surface; locks, audits, SBOM and provenance reduce but do not eliminate it. | Mitigated/documented |
